@@ -136,10 +136,10 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="adc_timer.c">
+    <Compile Include="adc.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="adc_timer.h">
+    <Compile Include="adc.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="sram.h">

@@ -9,7 +9,7 @@
 
 #include "uart.h"
 #include "sram.h"
-#include "adc_timer.h"
+#include "adc.h"
 
 #define FOSC 4915200 // Clock Speed
 #define BAUD 9600
@@ -21,11 +21,30 @@ int main(void)
 	USART_Init(MYUBRR);
 	
 	fdevopen(USART_Transmit, USART_Receive());
-	/*	
+	
+	/* ADC_Timer in PastFiles
+	clock_timer();
+	*/
+	
+	/* SRAM in PastFiles	
 	SRAM_init();
 	SRAM_test();	
 	*/
 	
+	/* Latch in PastFiles
+	DDRA |= (1 << PA7);
+	DDRE |= (1 << PE1);
+	PORTA = 0x1;
+	PORTE = 0x02;
+	PORTA |= (1 << PA7);
+	_delay_ms(1000);
+	PORTE = 0x00;
+	PORTA &= ~(1 << PA7);
+	_delay_ms(100);
+	*/
+	
+	/* UART in PastFiles
+	*/
 	while (1) {
 		char c = USART_Receive();
 		
