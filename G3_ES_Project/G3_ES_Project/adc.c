@@ -28,11 +28,16 @@ void adc_init(){
 
 //volatile
 uint8_t adc_read(uint8_t channel){
+	//set read to 1 and write to 0 so that we can write
+	PORTD = 0x80;
+
 	//set the pin as outputs
 	DDRA |= (1 << PA0) | (1 << PA1);
+	
 	//select which channel to write to
 	if (channel==0){
 		PORTA |= (0 << PA0) | (0 << PA1);
+		//printf("in if channel == 0");
 	}
 	else if (channel==1){
 		PORTA |= (1 << PA0) | (0 << PA1);
@@ -43,11 +48,14 @@ uint8_t adc_read(uint8_t channel){
 	else if (channel==3){
 		PORTA |= (1 << PA0) | (1 << PA1);
 	}
-	//set read to 1 and write to 0 so that we can write
-	PORTD = 0x80;
+	
 	_delay_us(4);
-	DDRA = 0x00;
+	//set read to 1 and write to 0 so that we can write
+	//PORTD = 0x80;
+	
 	//set write to 1 and read to 0 so that we can read
 	PORTD = 0x40;
+	DDRA = 0x00;
+	return PINA & 0xff;
 
 }

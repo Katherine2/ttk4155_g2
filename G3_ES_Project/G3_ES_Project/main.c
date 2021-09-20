@@ -17,7 +17,7 @@
 
 
 int main(void)
-{	
+{	int rec;
 	USART_Init(MYUBRR);
 	
 	fdevopen(USART_Transmit, USART_Receive);
@@ -25,7 +25,11 @@ int main(void)
 	/* ADC_Timer in PastFiles */
 	clock_timer();
 	adc_init();
-	
+	while(1){
+	rec = adc_read(0);
+	char crec = rec + '0';
+	USART_Transmit(crec);
+	}
 	/* SRAM in PastFiles	*/	
 	//SRAM_init();
 	//SRAM_test();	
@@ -51,6 +55,5 @@ int main(void)
 		printf("Character received: %c\r\n", c);
 	}*/
 }
-
 
 
