@@ -20,16 +20,20 @@ int main(void)
 {	
 	USART_Init(MYUBRR);
 	
-	fdevopen(USART_Transmit, USART_Receive());
+	fdevopen(USART_Transmit, USART_Receive);
 	
 	/* ADC_Timer in PastFiles
 	clock_timer();
 	*/
 	
-	/* SRAM in PastFiles	
+	/* SRAM in PastFiles	*/
+	//setting the SRAM CS to low to select it (active low) from the NAND gates
+	DDRC |= (1 << PC3);
+	PORTC = 0x04;
+	
 	SRAM_init();
 	SRAM_test();	
-	*/
+	
 	
 	/* Latch in PastFiles
 	DDRA |= (1 << PA7);
@@ -44,12 +48,12 @@ int main(void)
 	*/
 	
 	/* UART in PastFiles
-	*/
+	
 	while (1) {
 		char c = USART_Receive();
 		
 		printf("Character received: %c\r\n", c);
-	}
+	}*/
 }
 
 
