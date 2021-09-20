@@ -43,6 +43,10 @@ void SRAM_test(void)
 }
 
 void SRAM_init(){
+	//setting the SRAM CS to low to select it (active low) from the NAND gates
+	DDRC |= (1 << PC3);
+	PORTC = 0x04;
+	
 	printf("\r\n\n\nInitiating SRAM...\r\n");
 	
 	MCUCR |= (1<<SRE);

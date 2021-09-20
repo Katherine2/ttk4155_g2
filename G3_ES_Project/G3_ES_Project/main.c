@@ -22,17 +22,13 @@ int main(void)
 	
 	fdevopen(USART_Transmit, USART_Receive);
 	
-	/* ADC_Timer in PastFiles
+	/* ADC_Timer in PastFiles */
 	clock_timer();
-	*/
+	adc_init();
 	
-	/* SRAM in PastFiles	*/
-	//setting the SRAM CS to low to select it (active low) from the NAND gates
-	DDRC |= (1 << PC3);
-	PORTC = 0x04;
-	
-	SRAM_init();
-	SRAM_test();	
+	/* SRAM in PastFiles	*/	
+	//SRAM_init();
+	//SRAM_test();	
 	
 	
 	/* Latch in PastFiles
