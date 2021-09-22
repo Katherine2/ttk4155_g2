@@ -142,6 +142,18 @@
     <Compile Include="adc.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="joystick.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="joystick.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="slider.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="slider.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sram.h">
       <SubType>compile</SubType>
     </Compile>

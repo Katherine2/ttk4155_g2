@@ -10,6 +10,8 @@
 #include "uart.h"
 #include "sram.h"
 #include "adc.h"
+#include "joystick.h"
+#include "slider.h"
 
 #define FOSC 4915200 // Clock Speed
 #define BAUD 9600
@@ -22,14 +24,23 @@ int main(void)
 	
 	fdevopen(USART_Transmit, USART_Receive);
 	
-	/* ADC_Timer in PastFiles */
+	/* ADC */
 	clock_timer();
-	adc_init();
-	while(1){
-	rec = adc_read(0);
-	char crec = rec + '0';
-	USART_Transmit(crec);
+	SRAM_init();
+	
+	int center = joystick_init(1, 10);
+	//printf("center: %d\r\n", center);
+	int norm_val = 0;
+	while(1) {
+		uint8_t v = adc_read(0);
+		//printf("value: %d\r\n", v);
+		norm_val = normalize_output_joystick(v, center);
+		printf("normalized value: %d\r\n", norm_val);
+		printf("value: %d\r\n\n", v);
 	}
+	
+	
+	
 	/* SRAM in PastFiles	*/	
 	//SRAM_init();
 	//SRAM_test();	

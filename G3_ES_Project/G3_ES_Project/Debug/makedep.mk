@@ -4,6 +4,10 @@
 
 adc.c
 
+joystick.c
+
+slider.c
+
 sram.c
 
 main.c

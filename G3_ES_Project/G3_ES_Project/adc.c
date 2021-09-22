@@ -5,7 +5,11 @@
  *  Author: kathersi
  */ 
 
+#define ADC_BASE 0x1400
+
 #include "adc.h"
+
+volatile char *adc_reg = (char *) ADC_BASE;
 
 //set the clock
 void clock_timer() //previously called PWM_init() but I feel like this makes more sense as a function name
@@ -17,45 +21,32 @@ void clock_timer() //previously called PWM_init() but I feel like this makes mor
 	OCR3AH = 0b00000001;
 }
 
-
 void adc_init(){
 	//setting the ADC CS to low to select it (active low) from the NAND gates
 	DDRC |= (1 << PC2);
 	PORTC = 0x04;
-	//sets read and write as outputs
-	DDRD |= (1 << PD7) | (1 << PD6);
 }
 
 //volatile
-uint8_t adc_read(uint8_t channel){
-	//set read to 1 and write to 0 so that we can write
-	PORTD = 0x80;
-
-	//set the pin as outputs
-	DDRA |= (1 << PA0) | (1 << PA1);
+uint8_t adc_read(uint8_t channel){	
+	uint8_t adc_channel;
 	
 	//select which channel to write to
 	if (channel==0){
-		PORTA |= (0 << PA0) | (0 << PA1);
-		//printf("in if channel == 0");
+		 adc_channel = 0b10000000;
 	}
 	else if (channel==1){
-		PORTA |= (1 << PA0) | (0 << PA1);
+		adc_channel = 0b10000001;
 	}
 	else if (channel==2){
-		PORTA |= (0 << PA0) | (1 << PA1);
+		adc_channel = 0b10000010;
 	}
 	else if (channel==3){
-		PORTA |= (1 << PA0) | (1 << PA1);
+		adc_channel = 0b10000011;
 	}
+	adc_reg[0] = adc_channel;
+	_delay_us(40);
+	uint8_t adc_val = adc_reg[0];
 	
-	_delay_us(4);
-	//set read to 1 and write to 0 so that we can write
-	//PORTD = 0x80;
-	
-	//set write to 1 and read to 0 so that we can read
-	PORTD = 0x40;
-	DDRA = 0x00;
-	return PINA & 0xff;
-
+	return adc_val;
 }
