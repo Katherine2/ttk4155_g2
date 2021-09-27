@@ -6,6 +6,8 @@ adc.c
 
 joystick.c
 
+oled.c
+
 slider.c
 
 sram.c

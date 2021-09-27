@@ -12,6 +12,7 @@
 #include "adc.h"
 #include "joystick.h"
 #include "slider.h"
+#include "oled.h"
 
 #define FOSC 4915200 // Clock Speed
 #define BAUD 9600
@@ -24,11 +25,19 @@ int main(void)
 	
 	fdevopen(USART_Transmit, USART_Receive);
 	
-	/* ADC */
+	//set write pin of MCU to low to enter write mode of OLED
+	DDRD |= (1 << PD6);
+	PORTD |= (0 << PD6);
+	//set A9 of MCU to high to set the OLED command pin
+	DDRC |= (1 << PC1);
+	PORTC |= (1 << PC1);
+	OLED_init();
+	
+	/* ADC 
 	clock_timer();
 	SRAM_init();
 	
-	int center = joystick_init(1, 10);
+	int center = joystick_init(0, 10);
 	//printf("center: %d\r\n", center);
 	int norm_val = 0;
 	while(1) {
@@ -38,7 +47,7 @@ int main(void)
 		printf("normalized value: %d\r\n", norm_val);
 		printf("value: %d\r\n\n", v);
 	}
-	
+	*/
 	
 	
 	/* SRAM in PastFiles	*/	
