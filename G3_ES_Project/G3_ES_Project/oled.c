@@ -15,66 +15,90 @@ volatile char *oled_command_reg = (char *) OLED_COMMAND;
 volatile char *oled_data_reg = (char *) OLED_DATA;
 
 void OLED_init(){
-	OLED_write_data(0xae);        //display off
-	OLED_write_data(0xa1);        //segment remap
-	OLED_write_data(0xda);        //common pads hardware: alternative
-	OLED_write_data(0x12);
-	OLED_write_data(0xc8);        //common  output scan direction:com63~com0
-	OLED_write_data(0xa8);        //multiplex ration mode:63
-	OLED_write_data(0x3f);
-	OLED_write_data(0xd5);        //display  divide ratio/osc. freq. mode
-	OLED_write_data(0x80);
-	OLED_write_data(0x81);        //contrast control
-	OLED_write_data(0x50);
-	OLED_write_data(0xd9);        //set pre-charge period
-	OLED_write_data(0x21);
-	OLED_write_data(0x20);        //Set Memory Addressing Mode
-	OLED_write_data(0x02);			//page addressing mode
-	OLED_write_data(0xdb);        //VCOM deselect level mode
-	OLED_write_data(0x30);
-	OLED_write_data(0xad);        //master configuration
-	OLED_write_data(0x00);
-	OLED_write_data(0xa4);        //out follows RAM content
-	OLED_write_data(0xa6);        //set normal display
-	OLED_write_data(0xaf);        // display on
+	OLED_write_command(0xae);        //display off
+	OLED_write_command(0xa1);        //segment remap
+	OLED_write_command(0xda);        //common pads hardware: alternative
+	OLED_write_command(0x12);
+	OLED_write_command(0xc8);        //common  output scan direction:com63~com0
+	OLED_write_command(0xa8);        //multiplex ration mode:63
+	OLED_write_command(0x3f);
+	OLED_write_command(0xd5);        //display  divide ratio/osc. freq. mode
+	OLED_write_command(0x80);
+	OLED_write_command(0x81);        //contrast control
+	OLED_write_command(0x50);
+	OLED_write_command(0xd9);        //set pre-charge period
+	OLED_write_command(0x21);
+	OLED_write_command(0x20);        //Set Memory Addressing Mode
+	OLED_write_command(0x02);			//page addressing mode
+	OLED_write_command(0xdb);        //VCOM deselect level mode
+	OLED_write_command(0x30);
+	OLED_write_command(0xad);        //master configuration
+	OLED_write_command(0x00);
+	OLED_write_command(0xa4);        //out follows RAM content
+	OLED_write_command(0xa6);        //set normal display
+	OLED_write_command(0xaf);        // display on
 	
-	OLED_write_data(0xa5);		  // turn everything on 
-	/*
-	OLED_write_data(0x21);		  // set column address
-	OLED_write_data(0x00);		  // minimum is 0
-	OLED_write_data(0x127d);		  // maximum is 127
 	
-	OLED_write_data(0x22);		  // set page address
-	OLED_write_data(0x00);		  // minimum is 0
-	OLED_write_data(0x7d);		  // maximum is 7*/
+	//turn everything on
+	for (int j = 0; j<8; j++){
+		OLED_write_command(0xb0 + j);
+		for (int i = 0; i <128; i++){
+			OLED_write_data(0b11111111);
+		}
+	}
+	_delay_ms(500);
+	OLED_clear();
 }
 
-void OLED_clear(char c){
-	
+void OLED_clear(){
+	for (int j = 0; j<8; j++){
+		OLED_write_command(0xb0 + j);
+		for (int i = 0; i <128; i++){
+			OLED_write_data(0b00000000);
+		}
+	}
 }
 
-void OLED_write_data(char c){
+void OLED_write_command(char c){
 	oled_command_reg[0] = c;
 }
 
-void OLED_print(char* c){
-	/*c = c - 0x20;
+void OLED_write_data(char c){
+	oled_data_reg[0] = c;
+}
+
+void OLED_print(char c){
+	char buffer[8];
+	OLED_write_command(0xb0);
+	OLED_write_command(0b0000);
+	OLED_write_command(0b1000);
+	//printf("char: %c \r\n", c);
+	int pos = c - 32;
 	for (int i = 0; i < 8; i++){
-		char f = font8[c][i];
-		oled_data_reg[i] = f;
-	}*/
+		OLED_write_data(pgm_read_byte(&(font8[pos][i])));
+	}
 }
 
 void OLED_pos(uint8_t row, uint8_t column){
-	//DDRC |= (1 << PC1);
-	//PORTC |= (1 << PC1);
 	OLED_goto_line(row);
-	OLED_write_data(0x00);
+	OLED_goto_column(column);
 	//for now, when we want to write something, we will be writing from the leftmost positions so as to not deal with the columns at the beginning	
 }
 
 void OLED_goto_line(uint8_t line){
-	//DDRC |= (1 << PC1);
-	//PORTC |= (1 << PC1);
-	OLED_write_data(0xb0 + (line - 1));		//assuming lines are from 1 to 8 and not 0 to 7
+	OLED_write_command(0xb0 + (line));		
+}
+
+void OLED_goto_column(uint8_t column){
+	OLED_write_command(0b0000);
+	OLED_write_command(0b1000);
+	//OLED_write_command(column);
+}
+
+void OLED_print_string(char* str){
+	int i = 0;
+	while(str[i] != '\0'){
+		OLED_print(str[i]);
+		i++;
+	}
 }

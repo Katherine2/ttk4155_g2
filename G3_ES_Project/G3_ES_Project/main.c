@@ -24,26 +24,30 @@ int main(void)
 	USART_Init(MYUBRR);
 	
 	fdevopen(USART_Transmit, USART_Receive);
-	
+	/*
 	SRAM_init();
 	OLED_init();
-	//OLED_write_data("!");
+	OLED_pos(0, 0);
+	//OLED_print('X');
 	
-	/* ADC 
+	OLED_print_string("Hell!");
+	
+	*/
+	/* ADC */
 	clock_timer();
 	SRAM_init();
 	
-	int center = joystick_init(0, 10);
-	//printf("center: %d\r\n", center);
+	int center = joystick_init(1, 10);
+	printf("center: %d\r\n", center);
 	int norm_val = 0;
 	while(1) {
-		uint8_t v = adc_read(0);
+		uint8_t v = adc_read(1);
 		//printf("value: %d\r\n", v);
 		norm_val = normalize_output_joystick(v, center);
 		printf("normalized value: %d\r\n", norm_val);
 		printf("value: %d\r\n\n", v);
 	}
-	*/
+	
 	
 	
 	/* SRAM in PastFiles	*/	
