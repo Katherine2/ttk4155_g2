@@ -136,13 +136,17 @@ Discarded input sections
  .text          0x00000000        0x0 oled.o
  .data          0x00000000        0x0 oled.o
  .bss           0x00000000        0x0 oled.o
- .text.OLED_write_data
+ .text.OLED_clear
                 0x00000000        0x2 oled.o
- .text.OLED_pos
+ .text.OLED_write_data
+                0x00000000        0xc oled.o
+ .text.OLED_print
                 0x00000000        0x2 oled.o
  .text.OLED_goto_line
-                0x00000000        0x2 oled.o
- .data.oled_reg
+                0x00000000        0xe oled.o
+ .text.OLED_pos
+                0x00000000       0x10 oled.o
+ .data.oled_data_reg
                 0x00000000        0x2 oled.o
  .progmem.data.font4
                 0x00000000      0x17c oled.o
@@ -172,18 +176,6 @@ Discarded input sections
                 0x00000000       0xeb sram.o
  .text.SRAM_test
                 0x00000000      0x106 sram.o
- .text.SRAM_init
-                0x00000000        0xe sram.o
- .debug_info    0x00000000      0x1ac sram.o
- .debug_abbrev  0x00000000       0xf4 sram.o
- .debug_loc     0x00000000      0x1c2 sram.o
- .debug_aranges
-                0x00000000       0x28 sram.o
- .debug_ranges  0x00000000       0x48 sram.o
- .debug_line    0x00000000      0x163 sram.o
- .debug_str     0x00000000      0x1f2 sram.o
- .comment       0x00000000       0x31 sram.o
- .debug_frame   0x00000000       0xa8 sram.o
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
@@ -668,7 +660,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x418
+.text           0x00000000      0x532
  *(.vectors)
  .vectors       0x00000000       0x70 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega162/avr5/crtatmega162.o
                 0x00000000                __vector_default
@@ -758,37 +750,40 @@ END GROUP
                 0x000000ae                . = ALIGN (0x2)
  *(.text.*)
  .text.OLED_init
-                0x000000ae        0x2 oled.o
+                0x000000ae      0x114 oled.o
                 0x000000ae                OLED_init
- .text.main     0x000000b0       0x28 main.o
-                0x000000b0                main
+ .text.SRAM_init
+                0x000001c2        0xe sram.o
+                0x000001c2                SRAM_init
+ .text.main     0x000001d0       0x22 main.o
+                0x000001d0                main
  .text.USART_Init
-                0x000000d8        0xe uart.o
-                0x000000d8                USART_Init
+                0x000001f2        0xe uart.o
+                0x000001f2                USART_Init
  .text.USART_Transmit
-                0x000000e6        0x8 uart.o
-                0x000000e6                USART_Transmit
+                0x00000200        0x8 uart.o
+                0x00000200                USART_Transmit
  .text.USART_Receive
-                0x000000ee        0x8 uart.o
-                0x000000ee                USART_Receive
+                0x00000208        0x8 uart.o
+                0x00000208                USART_Receive
  .text.avr-libc
-                0x000000f6       0x96 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(fdevopen.o)
-                0x000000f6                fdevopen
+                0x00000210       0x96 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(fdevopen.o)
+                0x00000210                fdevopen
  .text.avr-libc
-                0x0000018c       0x38 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(calloc.o)
-                0x0000018c                calloc
+                0x000002a6       0x38 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(calloc.o)
+                0x000002a6                calloc
  .text.avr-libc
-                0x000001c4      0x242 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(malloc.o)
-                0x000001c4                malloc
-                0x000002f4                free
+                0x000002de      0x242 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(malloc.o)
+                0x000002de                malloc
+                0x0000040e                free
  .text.avr-libc
-                0x00000406        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(memset.o)
-                0x00000406                memset
-                0x00000414                . = ALIGN (0x2)
+                0x00000520        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(memset.o)
+                0x00000520                memset
+                0x0000052e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000414        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x00000414                _exit
-                0x00000414                exit
+ .fini9         0x0000052e        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x0000052e                _exit
+                0x0000052e                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -807,11 +802,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000414        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x0000052e        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000418                _etext = .
+                0x00000532                _etext = .
 
-.data           0x00800100        0x6 load address 0x00000418
+.data           0x00800100        0x8 load address 0x00000532
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x6 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(malloc.o)
@@ -819,34 +814,37 @@ END GROUP
                 0x00800102                __malloc_heap_start
                 0x00800104                __malloc_margin
  *(.data*)
+ .data.oled_command_reg
+                0x00800106        0x2 oled.o
+                0x00800106                oled_command_reg
  *(.gnu.linkonce.d*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.r*)
-                0x00800106                . = ALIGN (0x2)
-                0x00800106                _edata = .
-                0x00800106                PROVIDE (__data_end, .)
+                0x00800108                . = ALIGN (0x2)
+                0x00800108                _edata = .
+                0x00800108                PROVIDE (__data_end, .)
 
-.bss            0x00800106        0xa
-                0x00800106                PROVIDE (__bss_start, .)
+.bss            0x00800108        0xa
+                0x00800108                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  *(COMMON)
- COMMON         0x00800106        0x6 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(iob.o)
-                0x00800106                __iob
- COMMON         0x0080010c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(malloc.o)
-                0x0080010c                __brkval
-                0x0080010e                __flp
-                0x00800110                PROVIDE (__bss_end, .)
-                0x00000418                __data_load_start = LOADADDR (.data)
-                0x0000041e                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800108        0x6 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(iob.o)
+                0x00800108                __iob
+ COMMON         0x0080010e        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(malloc.o)
+                0x0080010e                __brkval
+                0x00800110                __flp
+                0x00800112                PROVIDE (__bss_end, .)
+                0x00000532                __data_load_start = LOADADDR (.data)
+                0x0000053a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800110        0x0
+.noinit         0x00800112        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800110                _end = .
-                0x00800110                PROVIDE (__heap_start, .)
+                0x00800112                _end = .
+                0x00800112                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -889,6 +887,7 @@ END GROUP
  *(.comment)
  .comment       0x00000000       0x30 oled.o
                                  0x31 (size before relaxing)
+ .comment       0x00000030       0x31 sram.o
  .comment       0x00000030       0x31 main.o
  .comment       0x00000030       0x31 uart.o
  .comment       0x00000030       0x31 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(fdevopen.o)
@@ -916,58 +915,68 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x88
+.debug_aranges  0x00000000       0xc0
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x38 oled.o
+                0x00000000       0x48 oled.o
  .debug_aranges
-                0x00000038       0x20 main.o
+                0x00000048       0x28 sram.o
  .debug_aranges
-                0x00000058       0x30 uart.o
+                0x00000070       0x20 main.o
+ .debug_aranges
+                0x00000090       0x30 uart.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x95c
+.debug_info     0x00000000      0xe75
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5d0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega162/avr5/crtatmega162.o
- .debug_info    0x000005d0      0x1bc oled.o
- .debug_info    0x0000078c       0xf0 main.o
- .debug_info    0x0000087c       0xe0 uart.o
+ .debug_info    0x000005d0      0x51e oled.o
+ .debug_info    0x00000aee      0x1ac sram.o
+ .debug_info    0x00000c9a       0xfb main.o
+ .debug_info    0x00000d95       0xe0 uart.o
 
-.debug_abbrev   0x00000000      0x776
+.debug_abbrev   0x00000000      0x8e9
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x580 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega162/avr5/crtatmega162.o
- .debug_abbrev  0x00000580       0xc1 oled.o
- .debug_abbrev  0x00000641       0xaa main.o
- .debug_abbrev  0x000006eb       0x8b uart.o
+ .debug_abbrev  0x00000580      0x14d oled.o
+ .debug_abbrev  0x000006cd       0xf4 sram.o
+ .debug_abbrev  0x000007c1       0x9d main.o
+ .debug_abbrev  0x0000085e       0x8b uart.o
 
-.debug_line     0x00000000      0x3f8
+.debug_line     0x00000000      0x58d
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x13f C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega162/avr5/crtatmega162.o
- .debug_line    0x0000013f       0xd6 oled.o
- .debug_line    0x00000215       0xea main.o
- .debug_line    0x000002ff       0xf9 uart.o
+ .debug_line    0x0000013f      0x11c oled.o
+ .debug_line    0x0000025b      0x163 sram.o
+ .debug_line    0x000003be       0xd6 main.o
+ .debug_line    0x00000494       0xf9 uart.o
 
-.debug_frame    0x00000000       0xbc
+.debug_frame    0x00000000      0x184
  *(.debug_frame)
- .debug_frame   0x00000000       0x54 oled.o
- .debug_frame   0x00000054       0x24 main.o
- .debug_frame   0x00000078       0x44 uart.o
+ .debug_frame   0x00000000       0x74 oled.o
+ .debug_frame   0x00000074       0xa8 sram.o
+ .debug_frame   0x0000011c       0x24 main.o
+ .debug_frame   0x00000140       0x44 uart.o
 
-.debug_str      0x00000000      0x435
+.debug_str      0x00000000      0x497
  *(.debug_str)
  .debug_str     0x00000000      0x1f6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega162/avr5/crtatmega162.o
- .debug_str     0x000001f6      0x19c oled.o
-                                0x1da (size before relaxing)
- .debug_str     0x00000392       0x25 main.o
-                                0x19b (size before relaxing)
- .debug_str     0x000003b7       0x7e uart.o
+ .debug_str     0x000001f6      0x1cb oled.o
+                                0x209 (size before relaxing)
+ .debug_str     0x000003c1       0x83 sram.o
+                                0x1f2 (size before relaxing)
+ .debug_str     0x00000444       0x25 main.o
+                                0x1a0 (size before relaxing)
+ .debug_str     0x00000469       0x2e uart.o
                                 0x1ad (size before relaxing)
 
-.debug_loc      0x00000000       0x26
+.debug_loc      0x00000000      0x452
  *(.debug_loc)
- .debug_loc     0x00000000       0x26 uart.o
+ .debug_loc     0x00000000      0x26a oled.o
+ .debug_loc     0x0000026a      0x1c2 sram.o
+ .debug_loc     0x0000042c       0x26 uart.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -987,11 +996,12 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x58
+.debug_ranges   0x00000000       0xb0
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x28 oled.o
- .debug_ranges  0x00000028       0x10 main.o
- .debug_ranges  0x00000038       0x20 uart.o
+ .debug_ranges  0x00000000       0x38 oled.o
+ .debug_ranges  0x00000038       0x48 sram.o
+ .debug_ranges  0x00000080       0x10 main.o
+ .debug_ranges  0x00000090       0x20 uart.o
 
 .debug_macro
  *(.debug_macro)

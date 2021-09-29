@@ -25,13 +25,9 @@ int main(void)
 	
 	fdevopen(USART_Transmit, USART_Receive);
 	
-	//set write pin of MCU to low to enter write mode of OLED
-	DDRD |= (1 << PD6);
-	PORTD |= (0 << PD6);
-	//set A9 of MCU to high to set the OLED command pin
-	DDRC |= (1 << PC1);
-	PORTC |= (1 << PC1);
+	SRAM_init();
 	OLED_init();
+	//OLED_write_data("!");
 	
 	/* ADC 
 	clock_timer();
