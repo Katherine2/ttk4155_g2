@@ -14,6 +14,9 @@
 #include "slider.h"
 #include "oled.h"
 #include "menu.h"
+#include "can.h"
+#include "spi.h"
+#include "mcp2515.h"
 
 #define FOSC 4915200 // Clock Speed
 #define BAUD 9600
