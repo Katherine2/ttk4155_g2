@@ -59,6 +59,11 @@ void OLED_clear(){
 	}
 }
 
+void OLED_clear_position(uint8_t row, uint8_t column){
+	OLED_pos(row, column);
+	OLED_print(' ');
+}
+
 void OLED_write_command(char c){
 	oled_command_reg[0] = c;
 }
@@ -68,11 +73,6 @@ void OLED_write_data(char c){
 }
 
 void OLED_print(char c){
-	char buffer[8];
-	OLED_write_command(0xb0);
-	OLED_write_command(0b0000);
-	OLED_write_command(0b1000);
-	//printf("char: %c \r\n", c);
 	int pos = c - 32;
 	for (int i = 0; i < 8; i++){
 		OLED_write_data(pgm_read_byte(&(font8[pos][i])));
@@ -90,9 +90,10 @@ void OLED_goto_line(uint8_t line){
 }
 
 void OLED_goto_column(uint8_t column){
-	OLED_write_command(0b0000);
-	OLED_write_command(0b1000);
-	//OLED_write_command(column);
+	//OLED_write_command(0x00);
+	//OLED_write_command(0x10);
+	OLED_write_command(column);
+	OLED_write_command(0x10);
 }
 
 void OLED_print_string(char* str){
@@ -101,4 +102,17 @@ void OLED_print_string(char* str){
 		OLED_print(str[i]);
 		i++;
 	}
+}
+
+void display_menu(){
+	OLED_pos(0,0);
+	OLED_print('>');
+	OLED_pos(0, 15);
+	OLED_print_string("Start Game");
+	OLED_pos(2, 15);
+	OLED_print_string("Change Brightness");
+	OLED_pos(4, 15);
+	OLED_print_string("Apple");
+	OLED_pos(6, 15);
+	OLED_print_string("Banana");
 }
