@@ -13,20 +13,12 @@
 #include "joystick.h"
 #include "slider.h"
 #include "oled.h"
+#include "menu.h"
 
 #define FOSC 4915200 // Clock Speed
 #define BAUD 9600
 #define MYUBRR FOSC/16/BAUD-1
 
-
-void navigate_menu(int channel, int centerX, int centerY){
-	clock_timer();
-	uint8_t v = adc_read(channel);
-	if (channel == 0){
-		
-	}
-	if (normalize_output_joystick(v, center) > 90)
-}
 
 int main(void)
 {	int rec;
@@ -37,15 +29,7 @@ int main(void)
 	SRAM_init();
 	OLED_init();
 	
-	display_menu();
-	
-	//_delay_ms(500);
-	//OLED_clear_position(0,0);
-	
-	
-	int centerX = joystick_init(0, 10);
-	int centerY = joystick_init(1, 10);
-	navigate_menu();
+	menu_init();
 	
 	
 	/* ADC 

@@ -29,4 +29,3 @@ void OLED_goto_column(uint8_t column);
 void OLED_print_string(char* str);
 
 void OLED_clear_position(uint8_t row, uint8_t column);
-void display_menu();

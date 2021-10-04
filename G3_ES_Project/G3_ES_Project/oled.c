@@ -104,15 +104,3 @@ void OLED_print_string(char* str){
 	}
 }
 
-void display_menu(){
-	OLED_pos(0,0);
-	OLED_print('>');
-	OLED_pos(0, 15);
-	OLED_print_string("Start Game");
-	OLED_pos(2, 15);
-	OLED_print_string("Change Brightness");
-	OLED_pos(4, 15);
-	OLED_print_string("Apple");
-	OLED_pos(6, 15);
-	OLED_print_string("Banana");
-}

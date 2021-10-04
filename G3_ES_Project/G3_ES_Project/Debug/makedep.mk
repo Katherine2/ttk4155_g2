@@ -6,6 +6,8 @@ adc.c
 
 joystick.c
 
+menu.c
+
 oled.c
 
 slider.c

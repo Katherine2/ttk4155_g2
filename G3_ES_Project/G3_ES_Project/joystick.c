@@ -8,9 +8,12 @@
 #include "adc.h"
 #include "joystick.h"
 
+//enum position{Left, Right, Up, Down, Neutral};
+
 int joystick_init(uint8_t channel, int samples){
 	uint8_t pos = 0;
 	int center = 0;
+	_delay_ms(100);
 	for(int i=0; i<samples; i++){
 		pos = adc_read(channel);
 		//printf("value: %d\r\n", pos);
