@@ -9,7 +9,7 @@
 #ifndef CAN_H_
 #define CAN_H_
 
-typedef struct  
+typedef struct   
 {
 	int length;
 	int idH;
@@ -19,7 +19,7 @@ typedef struct
 
 void can_init();
 int flag_changed();
-
-
+void can_transmit(can_msg msg);
+void can_receive();
 
 #endif /* CAN_H_ */

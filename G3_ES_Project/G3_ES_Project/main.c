@@ -29,10 +29,19 @@ int main(void)
 	
 	fdevopen(USART_Transmit, USART_Receive);
 	
-	printf("bla\r\n");
+	printf("\n\nbefore init\r\n");
 	can_init();
-	printf("hello\r\n");
-	while(1){}
+	
+	printf("after init\r\n");
+	can_msg a;
+	a.idH = 0x00;
+	a.idL = 0x00;
+	a.length = 0x08;
+	a.data = "1";
+	can_transmit(a);
+	while(1) {
+		can_receive();	
+	}
 	
 	/*
 	SRAM_init();

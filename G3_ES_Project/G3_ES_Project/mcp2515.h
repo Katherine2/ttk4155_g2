@@ -169,6 +169,9 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_RXB0SIDL	0X62	//address for lower nibble of ID (higher nibble already set higher in this doc)
 #define MCP_RXB0DLC		0X65	//address for the length
 #define MCP_RXB0Dm		0x66	//address for the data
+#define MCP_RXB1SIDL	0X72	//address for lower nibble of ID (higher nibble already set higher in this doc)
+#define MCP_RXB1DLC		0X75	//address for the length
+#define MCP_RXB1Dm		0x76	//address for the data
 
 
 uint8_t mcp2515_init();
@@ -178,5 +181,6 @@ void mcp2515_reset();
 void mcp2515_request_to_send();
 uint8_t mcp2515_read_status();
 void mcp2515_bit_modify(uint8_t address, uint8_t data_mask, uint8_t data);
+void mcp2515_read_array(uint8_t address, uint8_t length);
 
 #endif

@@ -15,10 +15,16 @@
 //Needed for initializing the SPI as a master
 void SPI_MasterInit(void){
 	// Set MOSI and SCK output, all others input, set CS as output
-	DDRB = (1<<PB5)|(1<<PB7)|(1<<PB0);
-	PORTB = (0<<PB0);
+	DDRB |= (1<<PB5)|(1<<PB7)|(1<<PB4);
+	DDRB &= ~(1<<PB6);
+	
+	PORTB &= ~(1<<PB4);
+	
 	// Enable SPI, Master, set clock rate fck/16 & select mode 00
-	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0)|(0<<CPOL)|(0<<CPHA);
+	SPCR |= (1<<SPE)|(1<<MSTR)|(1<<SPR0);
+
+	SPCR &= ~(1<<CPOL);
+	SPCR &= ~(1<<CPHA);
 }
 
 void SPI_MasterTransmit(char cData){
