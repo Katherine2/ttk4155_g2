@@ -8,6 +8,9 @@
 //SPI communication driver
 
 #include "spi.h"
+#include <stdint.h>
+#include <avr/io.h>
+
 
 //Needed for initializing the SPI as a master
 void SPI_MasterInit(void){
@@ -26,3 +29,7 @@ void SPI_MasterTransmit(char cData){
 }
 
 
+char SPI_MasterReceive(){
+	SPI_MasterTransmit(' ');
+	return SPDR;
+}  

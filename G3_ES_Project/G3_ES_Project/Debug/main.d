@@ -22,7 +22,7 @@ main.d main.o: .././main.c .././uart.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
  .././joystick.h .././slider.h .././oled.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h \
- .././menu.h
+ .././menu.h .././can.h .././spi.h .././mcp2515.h
 
 .././uart.h:
 
@@ -77,3 +77,9 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h:
 
 .././menu.h:
+
+.././can.h:
+
+.././spi.h:
+
+.././mcp2515.h:

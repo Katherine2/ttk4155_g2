@@ -4,13 +4,19 @@
 
 adc.c
 
+can.c
+
 joystick.c
+
+mcp2515.c
 
 menu.c
 
 oled.c
 
 slider.c
+
+spi.c
 
 sram.c
 

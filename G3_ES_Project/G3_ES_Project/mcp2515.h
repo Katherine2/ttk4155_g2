@@ -15,6 +15,8 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 // Define MCP2515 register addresses
 
+#include <stdint.h>
+
 #define MCP_RXF0SIDH	0x00
 #define MCP_RXF0SIDL	0x01
 #define MCP_RXF0EID8	0x02
@@ -154,8 +156,27 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_WAKIF		0x40
 #define MCP_MERRF		0x80
 
+
+// Extra CAN registers
+
+//transmit
+#define MCP_TXB0DLC		0x35	//address for length
+#define MCP_TXB0SIDH	0x31	//address for higher nibble of ID
+#define MCP_TXB0SIDL	0x32	//address for lower nibble of ID
+#define MCP_TXB0Dm		0x36	//address for data transmit buffer
+
+//receive
+#define MCP_RXB0SIDL	0X62	//address for lower nibble of ID (higher nibble already set higher in this doc)
+#define MCP_RXB0DLC		0X65	//address for the length
+#define MCP_RXB0Dm		0x66	//address for the data
+
+
 uint8_t mcp2515_init();
 uint8_t mcp2515_read(uint8_t address);
+void mcp2515_write(uint8_t address, uint8_t data);
 void mcp2515_reset();
+void mcp2515_request_to_send();
+uint8_t mcp2515_read_status();
+void mcp2515_bit_modify(uint8_t address, uint8_t data_mask, uint8_t data);
 
 #endif

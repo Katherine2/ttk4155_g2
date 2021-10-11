@@ -29,11 +29,17 @@ int main(void)
 	
 	fdevopen(USART_Transmit, USART_Receive);
 	
+	printf("bla\r\n");
+	can_init();
+	printf("hello\r\n");
+	while(1){}
+	
+	/*
 	SRAM_init();
 	OLED_init();
 	
 	menu_init();
-	
+	*/
 	
 	/* ADC 
 	clock_timer();
