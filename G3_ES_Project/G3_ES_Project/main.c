@@ -29,20 +29,30 @@ int main(void)
 	
 	fdevopen(USART_Transmit, USART_Receive);
 	
-	printf("\n\nbefore init\r\n");
+	//printf("\n\nbefore init\r\n");
 	can_init();
+	//printf("after init\r\n");
 	
-	printf("after init\r\n");
+	while(1){
+		//SPI_MasterTransmit(0b1010);
+		//mcp2515_write(MCP_TXB0Dm, 0b1010);
+		mcp2515_write(MCP_TXB0SIDH, 0x00);
+		mcp2515_write(MCP_TXB0SIDL, 0x00);
+		mcp2515_write(MCP_TXB0DLC, 0x08);
+		mcp2515_write(MCP_TXB0Dm, 0b1010);
+		mcp2515_write(MCP_TXB0CTRL, 0x07);
+	}
+	/*
 	can_msg a;
 	a.idH = 0x00;
 	a.idL = 0x00;
 	a.length = 0x08;
-	a.data = "1";
-	can_transmit(a);
+	a.data[0] = 0b10101;
 	while(1) {
-		can_receive();	
+		can_transmit(a);
+		//can_receive();	
 	}
-	
+	*/
 	/*
 	SRAM_init();
 	OLED_init();

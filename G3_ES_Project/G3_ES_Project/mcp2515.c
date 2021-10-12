@@ -44,15 +44,11 @@ uint8_t mcp2515_read(uint8_t address){
 }
 
 void mcp2515_write(uint8_t address, uint8_t data){
-	
-	uint8_t result;
-	
+	//uint8_t result;
 	PORTB &= ~(1<<PB4);
-	
 	SPI_MasterTransmit(MCP_WRITE);
 	SPI_MasterTransmit(address);
 	SPI_MasterTransmit(data);
-	
 	PORTB |= (1<<PB4);
 }
 
@@ -64,7 +60,7 @@ void mcp2515_reset(){
 
 //REALLY NOT SURE
 void mcp2515_request_to_send(){
-	mcp2515_write(MCP_TXB0CTRL, 0x07);
+	mcp2515_write(MCP_TXB0CTRL, 0x07);		//enable all transmit buffers to send
 }
 
 //WHAT ADDRESS DO WE NEED TO USE FOR THE MCP_WRITE FUNCTION??
