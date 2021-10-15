@@ -12,15 +12,15 @@
 typedef struct   
 {
 	int length;
-	int idH;
-	int idL;
-	char data[20];
+// 	int idH;
+// 	int idL;
+	int id;
+	char data[8];
 	
 }can_msg;
 
-void can_init();
-int flag_changed();
+void can_init(void);
 void can_transmit(can_msg msg);
-void can_receive();
+void can_receive(void);
 
 #endif /* CAN_H_ */
