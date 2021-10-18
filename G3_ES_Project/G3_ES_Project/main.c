@@ -33,30 +33,15 @@ int main(void)
 	
 	fdevopen(USART_Transmit, USART_Receive);
 	
-	//printf("\n\nbefore init\r\n");
 	can_init();
-	//printf("after init\r\n");
-	/*
-	while(1){
-		//SPI_MasterTransmit(0b1010);
-		//mcp2515_write(MCP_TXB0Dm, 0b1010);
-		mcp2515_write(MCP_TXB0SIDH, 0x00);
-		mcp2515_write(MCP_TXB0SIDL, 0x00);
-		mcp2515_write(MCP_TXB0DLC, 0x08);
-		mcp2515_write(MCP_TXB0Dm, 0b1010);
-		mcp2515_write(MCP_TXB0CTRL, 0x07);
-	}*/
 	
 	can_msg a;
 	a.id = 5;
 	a.length = 8;
-	a.data[0] = '6';
-	//can_transmit(a);
-	//_delay_ms(1);
+	a.data[0] = 'X';
 	while(1) {
 		can_transmit(a);
 		_delay_ms(1000);
-		//can_receive();
 	}
 	
 	/*

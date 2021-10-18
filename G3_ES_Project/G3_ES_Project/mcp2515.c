@@ -15,15 +15,14 @@
 int status;
 
 void mcp2515_init(void){
+	uint8_t value;
+
 	SPI_MasterInit();
- 	uint8_t value;
-	
 	mcp2515_reset();
 	
 	value = mcp2515_read(MCP_CANSTAT);
 	if((value & MODE_MASK) != MODE_CONFIG){
 		printf("MCP2515 is NOT in configuration mode after reset!\n");
-		//return 1;
 	}
 	//More initialization
 	
@@ -52,23 +51,14 @@ void mcp2515_write(uint8_t address, uint8_t data){
 }
 
 void mcp2515_reset(void){
-	//Needs to put MCP2515 in configuration mode
-	//mcp2515_write(MCP_CANCTRL, MODE_CONFIG);																					//Hææææ?????
-		PORTB &= ~(1<<PB4);
-		SPI_MasterTransmit(MCP_RESET);
-		PORTB |= (1<<PB4);
-
+	PORTB &= ~(1<<PB4);
+	SPI_MasterTransmit(MCP_RESET);
+	PORTB |= (1<<PB4);
 }
 
 
-//REALLY NOT SURE
-// void mcp2515_request_to_send_buff0(){
-// 	mcp2515_write(MCP_TXB0CTRL, 0x80);																							//enable all transmit buffers to send
-// }
-
 void mcp2515_request_to_send(uint8_t buffer){
 	PORTB &= ~(1<<PB4);
-
 	switch(buffer){
 	case 0:
 		SPI_MasterTransmit(MCP_RTS_TX0);
@@ -87,11 +77,8 @@ void mcp2515_request_to_send(uint8_t buffer){
 	break;
 	}
 	PORTB |= (1<<PB4);
-
 }
 
-
-//WHAT ADDRESS DO WE NEED TO USE FOR THE MCP_WRITE FUNCTION??
 uint8_t mcp2515_read_status(void){
 	uint8_t result;
 	PORTB &= ~(1<<PB4);
@@ -99,9 +86,6 @@ uint8_t mcp2515_read_status(void){
 	result = SPI_MasterReceive();
 	PORTB |= (1<<PB4);
 	return result;
-
-	//mcp2515_write(MCP_CANINTF, MCP_READ_STATUS);
-	//mcp2515_read(MCP_CANINTF);
 }
 
 void mcp2515_bit_modify(uint8_t address, uint8_t data_mask, uint8_t data){
@@ -111,11 +95,9 @@ void mcp2515_bit_modify(uint8_t address, uint8_t data_mask, uint8_t data){
 	SPI_MasterTransmit(data_mask);
 	SPI_MasterTransmit(data);
 	PORTB |= (1<<PB4);
-
 }
 
-
-//NEED TO RETURN SOMETHING!!
+/*
 char mcp2515_read_array(uint8_t address, uint8_t length){
 	char result[8];
 	for (int i=0; i<length; i++){
@@ -124,7 +106,7 @@ char mcp2515_read_array(uint8_t address, uint8_t length){
 	}
 	return result;
 }
-
+*/
 // void mcp2515_write_array(uint8_t address, uint8_t length, char data){
 // 	for (int i=0; i<length; i++){
 // 		mcp2515_write(address + i, data[i]);

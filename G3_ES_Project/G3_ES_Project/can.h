@@ -12,8 +12,6 @@
 typedef struct   
 {
 	int length;
-// 	int idH;
-// 	int idL;
 	int id;
 	char data[8];
 	

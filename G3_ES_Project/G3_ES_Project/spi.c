@@ -11,12 +11,10 @@
 #include <stdint.h>
 #include <avr/io.h>
 
-
 #define SS PB4
 #define MOSI PB5
 #define MISO PB6
 #define SCK PB7
-
 
 //Needed for initializing the SPI as a master
 void SPI_MasterInit(void){
@@ -30,8 +28,7 @@ void SPI_MasterInit(void){
 	SPCR &= ~(1<<CPOL);		//Not required
 	SPCR &= ~(1<<CPHA);		//Not required
 
-	PORTB |= (1<<SS);																						//Why is the chip select pin pulled low and not high?
-
+	PORTB |= (1<<SS);																			//Why is the chip select pin pulled low and not high?
 }
 
 void SPI_MasterTransmit(char cData){
@@ -42,7 +39,7 @@ void SPI_MasterTransmit(char cData){
 }
 
 
-char SPI_MasterReceive(){
+char SPI_MasterReceive(void){
 	SPI_MasterTransmit(' ');
 	return SPDR;
 }  
