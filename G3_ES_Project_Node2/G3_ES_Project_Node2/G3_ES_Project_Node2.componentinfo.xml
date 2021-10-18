@@ -91,7 +91,7 @@
 					<Attribute>template</Attribute>
 					<Category>source</Category>
 					<Condition>C Exe</Condition>
-					<FileContentHash>Vo8vdq7tUtNN3p7dW/sPCA==</FileContentHash>
+					<FileContentHash>OOBgcG2ISb0Hu4joiU4Lig==</FileContentHash>
 					<FileVersion></FileVersion>
 					<Name>templates/main.c</Name>
 					<SelectString>Main file (.c)</SelectString>

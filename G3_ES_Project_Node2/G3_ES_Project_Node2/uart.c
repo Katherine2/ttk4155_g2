@@ -10,10 +10,11 @@
 #include <stdint.h>
 
 #include "sam.h"
-#include "uart_node2.h"
+#include "uart.h"
 
 //Ringbuffer for receiving multiple characters
 uart_ringbuffer rx_buffer;
+
 
 /**
  * \brief Configure UART.
@@ -75,6 +76,7 @@ void configure_uart(void)
 
 	// Enable UART receiver and transmitter
 	UART->UART_CR = UART_CR_RXEN | UART_CR_TXEN;
+
 }
 
 /**
@@ -84,7 +86,8 @@ void configure_uart(void)
  *
  * \retval Success(0) or failure(1)
  */
-int uart_getchar(uint8_t *c){
+int uart_getchar(uint8_t *c)
+{
 	// Check if a character is available in the ringbuffer
 	if(rx_buffer.head == rx_buffer.tail) { //Buffer is empty
 		return 1;
@@ -103,7 +106,8 @@ int uart_getchar(uint8_t *c){
  *
  * \retval Success(0) or failure(1).
  */
-int uart_putchar(const uint8_t c){
+int uart_putchar(const uint8_t c)
+{
 	// Check if the transmitter is ready
 	if((UART->UART_SR & UART_SR_TXRDY) != UART_SR_TXRDY)
 	return 1;
@@ -114,23 +118,27 @@ int uart_putchar(const uint8_t c){
 	return 0;
 }
 
-void UART_Handler(void){
+void UART_Handler(void)
+{
 	uint32_t status = UART->UART_SR;
 	
 	//Reset UART at overflow error and frame error
-	if(status & (UART_SR_OVRE | UART_SR_FRAME | UART_SR_PARE)){
+	if(status & (UART_SR_OVRE | UART_SR_FRAME | UART_SR_PARE))
+	{
 		UART->UART_CR = UART_CR_RXEN | UART_CR_TXEN | UART_CR_RSTSTA;
 	}
 	
 	//Check if message is ready to be received
-	if(status & UART_SR_RXRDY){
+	if(status & UART_SR_RXRDY)
+	{
 		//Check if receive ring buffer is full and 
-		if((rx_buffer.tail + 1) % UART_RINGBUFFER_SIZE == rx_buffer.head){
+		if((rx_buffer.tail + 1) % UART_RINGBUFFER_SIZE == rx_buffer.head)
+		{
 			printf("ERR: UART RX buffer is full\n\r");
 			rx_buffer.data[rx_buffer.tail] = UART->UART_RHR; //Throw away message
 			return;
 		}
 		rx_buffer.data[rx_buffer.tail] = UART->UART_RHR;
-		rx_buffer.tail = (rx_buffer.tail + 1) % UART_RINGBUFFER_SIZE;	
+		rx_buffer.tail = (rx_buffer.tail + 1) % UART_RINGBUFFER_SIZE;
 	}
 }
