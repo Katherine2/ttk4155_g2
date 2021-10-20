@@ -24,8 +24,15 @@ void mcp2515_init(void){
 	if((value & MODE_MASK) != MODE_CONFIG){
 		printf("MCP2515 is NOT in configuration mode after reset!\n");
 	}
-	//More initialization
-	
+	//bit timing: BRP = 3 & 16TQ => SyncSeg = 1, PropSeg = 2, PS1 = 7, PS2 = 6, SJW = 1
+	/*
+	SPI_MasterTransmit(MCP_CNF1);
+	SPI_MasterTransmit(0x03);
+	SPI_MasterTransmit(MCP_CNF2);
+	SPI_MasterTransmit(0b10111010);
+	SPI_MasterTransmit(MCP_CNF3);
+	SPI_MasterTransmit(0b00000110);
+	*/
 }
 
 uint8_t mcp2515_read(uint8_t address){

@@ -21,6 +21,7 @@ void clock_timer() //previously called PWM_init() but I feel like this makes mor
 	OCR3AH = 0b00000001;
 }
 
+//should be deleted?
 void adc_init(){
 	//setting the ADC CS to low to select it (active low) from the NAND gates
 	DDRC |= (1 << PC2);

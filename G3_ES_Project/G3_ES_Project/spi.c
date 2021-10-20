@@ -28,7 +28,7 @@ void SPI_MasterInit(void){
 	SPCR &= ~(1<<CPOL);		//Not required
 	SPCR &= ~(1<<CPHA);		//Not required
 
-	PORTB |= (1<<SS);																			//Why is the chip select pin pulled low and not high?
+	PORTB |= (1<<SS);
 }
 
 void SPI_MasterTransmit(char cData){
@@ -40,6 +40,6 @@ void SPI_MasterTransmit(char cData){
 
 
 char SPI_MasterReceive(void){
-	SPI_MasterTransmit(' ');
+	SPI_MasterTransmit('a');
 	return SPDR;
 }  

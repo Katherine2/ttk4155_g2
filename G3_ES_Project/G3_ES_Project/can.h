@@ -14,7 +14,6 @@ typedef struct
 	int length;
 	int id;
 	char data[8];
-	
 }can_msg;
 
 void can_init(void);

@@ -26,6 +26,8 @@
 #define BAUD 9600
 #define MYUBRR FOSC/16/BAUD-1
 
+#define HORIZONTAL 0
+#define VERTICAL 1
 
 int main(void)
 {	int rec;
@@ -33,17 +35,46 @@ int main(void)
 	
 	fdevopen(USART_Transmit, USART_Receive);
 	
+	clock_timer();
+	SRAM_init();
+	//can_init();
+	int centerH = joystick_init(HORIZONTAL, 10);
+	printf("CENTER: %d\r\n", centerH);
+	//int centerV = joystick_init(VERTICAL, 10);
+	int outputH = 0;
+	while(1){
+		uint8_t valueH = adc_read(HORIZONTAL);
+		printf("ADC output: %d\r\n", valueH);
+		outputH = normalize_output_joystick(valueH, centerH);
+		printf("Horizontal output: %d\r\n", outputH);
+		//int valueV = adc_read(VERTICAL);
+		//printf("ADC output: %d\r\n", valueV);
+		//int outputV = normalize_output_joystick(valueV, centerV);
+		//printf("Vertical output: %d\r\n", outputV);
+	}
+	//***************** SENDING JOYSTICK POSITIONS OVER CAN TO NODE 2 **************/
+	/*
+	//while (1){
+		int valueH = adc_read(HORIZONTAL);
+		int valueV = adc_read(VERTICAL);
+		send_position(normalize_output_joystick(valueH, centerH));
+		send_position(normalize_output_joystick(valueV, centerV));
+		_delay_ms(3000);
+	//}*/
+	/*********************************** CAN **************************************/
+	/*
 	can_init();
-	
 	can_msg a;
-	a.id = 5;
-	a.length = 8;
-	a.data[0] = 'X';
+	a.id = 2;
+	a.length = 3;
+	a.data[0] = '#';
 	while(1) {
+		//a.data[0] = a.data[0]+1;
 		can_transmit(a);
 		_delay_ms(1000);
 	}
-	
+	*/
+	/********************************** OLED ***********************************/
 	/*
 	SRAM_init();
 	OLED_init();
@@ -51,7 +82,8 @@ int main(void)
 	menu_init();
 	*/
 	
-	/* ADC 
+	/********************************** ADC **********************************/
+	/* 
 	clock_timer();
 	SRAM_init();
 	
@@ -66,7 +98,7 @@ int main(void)
 	}
 	*/
 	
-	/* SRAM in PastFiles	*/	
+	/********************************* SRAM *************************************/
 	//SRAM_init();
 	//SRAM_test();	
 	
@@ -83,8 +115,8 @@ int main(void)
 	_delay_ms(100);
 	*/
 	
-	/* UART in PastFiles
-	
+	/*********************************** UART **************************************/
+	/* 
 	while (1) {
 		char c = USART_Receive();
 		

@@ -173,6 +173,12 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_RXB1DLC		0X75	//address for the length
 #define MCP_RXB1D0		0x76	//address for the data
 
+//Bit timing
+
+#define CANBAUD 125000
+#define BRP 3
+#define TQ (2*(BRP+1))/FOSC		//500ns
+#define BITTIME 1/(TQ*CANBAUD)	//16TQ => SyncSeg = 1, PropSeg = 2, PS1 = 7, PS2 = 6, SJW = 1
 
 void mcp2515_init(void);
 uint8_t mcp2515_read(uint8_t address);

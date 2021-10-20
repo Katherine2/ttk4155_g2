@@ -16,15 +16,30 @@
 void can_init(void){
 	mcp2515_init();
 	mcp2515_write(MCP_CANINTE, 0X03);		//enables the reception complete flag (for the interrupt)
-	mcp2515_write(MCP_CANCTRL, MODE_LOOPBACK);
+	
+	
+	mcp2515_write(MCP_CNF3, 0x01);
+	mcp2515_write(MCP_CNF2, 0xb5);
+	mcp2515_write(MCP_CNF1, 0x43);
+	
+	//Check that the registers have the right values
+	uint8_t cnf1 = mcp2515_read(MCP_CNF1);
+	printf("cnf1:%d\r\n", cnf1);		//should be 67
+	uint8_t cnf2 = mcp2515_read(MCP_CNF2);
+	printf("cnf2:%d\r\n", cnf2);		//should be 181
+	uint8_t cnf3 = mcp2515_read(MCP_CNF3);
+	printf("cnf3:%d\r\n\n", cnf3);		//should be 1
+	
+	
+	mcp2515_write(MCP_CANCTRL, MODE_NORMAL);
  	uint8_t value;
 
 	value = mcp2515_read(MCP_CANSTAT);
 
-	if((value & MODE_MASK) != MODE_LOOPBACK){
-		printf("MCP2515 is NOT in loopback mode after reset!\n");
-	}			
-
+	if((value & MODE_MASK) != MODE_NORMAL){
+		printf("MCP2515 is NOT in normal mode after reset!\n");
+	}		
+		
 	// Disable global interrupts
 	cli();
 	// Interrupt on falling edge
@@ -60,12 +75,15 @@ void can_receive(void){
 
 void can_transmit(can_msg msg){
 	mcp2515_write(MCP_TXB0SIDH, msg.id >> 3);
-	mcp2515_write(MCP_TXB0SIDL, msg.id << 5);
+	mcp2515_write(MCP_TXB0SIDL, msg.id << 5); 
 	mcp2515_write(MCP_TXB0DLC, msg.length);
 	for(uint8_t i = 0; i < (msg.length); i++){
 		mcp2515_write(MCP_TXB0D0 + i, msg.data[i]);
+		printf("data:%d at i = %d\r\n", msg.data[i], i);
 	}
 	mcp2515_request_to_send(0);
+	
+	printf("Sending:\r\ndata: %c\r\nlength: %d\r\nid: %d\r\n\n", msg.data[0], msg.length, msg.id);
 }
 
 ISR(INT0_vect){
