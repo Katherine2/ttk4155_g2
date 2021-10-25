@@ -16,8 +16,7 @@
 void can_init(void){
 	mcp2515_init();
 	mcp2515_write(MCP_CANINTE, 0X03);		//enables the reception complete flag (for the interrupt)
-	
-	
+		
 	mcp2515_write(MCP_CNF3, 0x01);
 	mcp2515_write(MCP_CNF2, 0xb5);
 	mcp2515_write(MCP_CNF1, 0x43);
@@ -79,11 +78,11 @@ void can_transmit(can_msg msg){
 	mcp2515_write(MCP_TXB0DLC, msg.length);
 	for(uint8_t i = 0; i < (msg.length); i++){
 		mcp2515_write(MCP_TXB0D0 + i, msg.data[i]);
-		printf("data:%d at i = %d\r\n", msg.data[i], i);
+		//printf("data: %d\r\n", msg.data[i]);
 	}
 	mcp2515_request_to_send(0);
 	
-	printf("Sending:\r\ndata: %c\r\nlength: %d\r\nid: %d\r\n\n", msg.data[0], msg.length, msg.id);
+	//printf("Sending:\r\ndata: %c\r\nlength: %d\r\nid: %d\r\n\n", msg.data[0], msg.length, msg.id);
 }
 
 ISR(INT0_vect){

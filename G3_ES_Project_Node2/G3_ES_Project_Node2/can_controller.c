@@ -9,10 +9,10 @@
  */ 
 
 #include "can_controller.h"
-
 #include "sam.h"
-
 #include "printf-stdarg.h"
+
+#define DEBUG_INTERRUPT 1
 
 
 /**
@@ -40,25 +40,19 @@ uint8_t can_init_def_tx_rx_mb(uint32_t can_br)
  *
  * \retval Success(0) or failure(1)
  */
-
-
 uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb)
 {
-	
 	//Make sure num_rx_mb and num_tx_mb is valid
-	if(num_rx_mb > 8 | num_tx_mb > 8 | num_rx_mb + num_tx_mb > 8)
-	{
+	if(num_rx_mb > 8 | num_tx_mb > 8 | num_rx_mb + num_tx_mb > 8){
 		return 1; //Too many mailboxes is configured
 	}
-
-
+	
 	uint32_t ul_status; 
 	
 	//Disable can
 	CAN0->CAN_MR &= ~CAN_MR_CANEN; 
 	//Clear status register on read
 	ul_status = CAN0->CAN_SR; 
-	
 	
 	// Disable interrupts on CANH and CANL pins
 	PIOA->PIO_IDR = PIO_PA8A_URXD | PIO_PA9A_UTXD;
@@ -73,7 +67,6 @@ uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb)
 	// Enable pull up on CANH and CANL pin
 	PIOA->PIO_PUER = (PIO_PA1A_CANRX0 | PIO_PA0A_CANTX0);
 	
-	
 	//Enable Clock for CAN0 in PMC
 	PMC->PMC_PCR = PMC_PCR_EN | (0 << PMC_PCR_DIV_Pos) | PMC_PCR_CMD | (ID_CAN0 << PMC_PCR_PID_Pos); // DIV = 1(can clk = MCK/2), CMD = 1 (write), PID = 2B (CAN0)
 	PMC->PMC_PCER1 |= 1 << (ID_CAN0 - 32);
@@ -83,7 +76,6 @@ uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb)
 	//can_br = 0b00000000000000110001001001110110;
 	CAN0->CAN_BR = can_br; 
 	
-
 	/****** Start of mailbox configuration ******/
 
 	uint32_t can_ier = 0;
@@ -150,12 +142,10 @@ uint8_t can_send(CAN_MESSAGE* can_msg, uint8_t tx_mb_id)
 		CAN0->CAN_MB[tx_mb_id].CAN_MCR = (can_msg->data_length << CAN_MCR_MDLC_Pos) | CAN_MCR_MTCR;
 		return 0;
 	}
-	
 	else //Mailbox busy
 	{
 		return 1;
 	}
-	
 }
 
 /**
@@ -208,3 +198,16 @@ uint8_t can_receive(CAN_MESSAGE* can_msg, uint8_t rx_mb_id)
 	}
 }
 
+/* Move the can handler in this file and use these functions to get the message in main
+int new_message_received(void){
+	return newMessage;
+}
+
+
+CAN_MESSAGE get_message(void){
+	//if (newMessage){
+	newMessage = 0;
+	return message;
+	//}
+}
+*/

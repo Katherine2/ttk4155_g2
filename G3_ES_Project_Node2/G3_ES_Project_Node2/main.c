@@ -25,16 +25,30 @@ int main(void)
 {
     /* Initialize the SAM system */
     SystemInit();
-    WDT->WDT_MR = WDT_MR_WDDIS;
+    WDT->WDT_MR = WDT_MR_WDDIS;		//disable the watchdog timer
 	configure_uart();
-	can_init_def_tx_rx_mb(0x00290561);
-	
+	can_init_def_tx_rx_mb(0x00290561);/*
+	CAN_MESSAGE msg;
+	while (1){
+		if(new_message_received()){
+			msg = get_message();
+		}
+		printf("new message: \r\n");
+		printf("message id: %d\n\r", msg.id);
+		printf("message data length: %d\n\rmessage data: ", msg.data_length);
+		for (int i = 0; i < msg.data_length; i++)
+		{
+			printf("%d ", msg.data[i]);
+		}
+		printf("\n\n\r");
+	}
+	*/
 	/************************** SERVO ************************************/
 	/*PIOC -> PIO_PDR = PIO_PC18;		//enable peripheral control of the pin
 	PIOC -> PIO_ABSR = PIO_PC18;	//set it to peripheral B mode
 	//need to clear WPEN bit in PMC Write Protect Register (we are assuming it defaults to 0)
-	PIOC -> PMC_PCER0
-	*/
+	PIOC -> PMC_PCER0 = PIO_PC18;*/
+	
 	/************************** LEDS *************************************/
 	/*
 	PIOA -> PIO_PER = PIO_PA19;		//enables input/output function

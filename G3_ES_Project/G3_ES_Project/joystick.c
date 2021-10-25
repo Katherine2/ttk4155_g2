@@ -37,10 +37,13 @@ int normalize_output_joystick(uint8_t value, int center){
 }
 
 void send_position(int position){
-	printf("position: %d\r\n", position);
+	//printf("position: %d\r\n", position);
 	can_msg msg;
 	msg.id = 1;
 	msg.length = 1;
 	msg.data[0] = (char)position;
+	printf("message id in node 1: %d\r\n", msg.id);
+	printf("message length in node 1: %d\r\n", msg.length);
+	printf("message data in node 1: %d\r\n\n", msg.data[0]);
 	can_transmit(msg);
 }
