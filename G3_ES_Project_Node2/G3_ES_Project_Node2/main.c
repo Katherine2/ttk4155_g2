@@ -29,6 +29,12 @@ int main(void)
 	configure_uart();
 	can_init_def_tx_rx_mb(0x00290561);
 	
+	/************************** SERVO ************************************/
+	/*PIOC -> PIO_PDR = PIO_PC18;		//enable peripheral control of the pin
+	PIOC -> PIO_ABSR = PIO_PC18;	//set it to peripheral B mode
+	//need to clear WPEN bit in PMC Write Protect Register (we are assuming it defaults to 0)
+	PIOC -> PMC_PCER0
+	*/
 	/************************** LEDS *************************************/
 	/*
 	PIOA -> PIO_PER = PIO_PA19;		//enables input/output function

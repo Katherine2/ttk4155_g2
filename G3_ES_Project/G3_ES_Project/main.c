@@ -37,30 +37,35 @@ int main(void)
 	
 	clock_timer();
 	SRAM_init();
-	//can_init();
+	can_init();
+	
 	int centerH = joystick_init(HORIZONTAL, 10);
-	printf("CENTER: %d\r\n", centerH);
-	//int centerV = joystick_init(VERTICAL, 10);
-	int outputH = 0;
+	//printf("CENTER: %d\r\n", centerH);
+	
+	int centerV = joystick_init(VERTICAL, 10);
+	//int outputH = 0;
+	/*
 	while(1){
 		uint8_t valueH = adc_read(HORIZONTAL);
-		printf("ADC output: %d\r\n", valueH);
+		printf("ADC output X: %d\r\n", valueH);
 		outputH = normalize_output_joystick(valueH, centerH);
-		printf("Horizontal output: %d\r\n", outputH);
+		//printf("Horizontal output: %d\r\n", outputH);
 		//int valueV = adc_read(VERTICAL);
-		//printf("ADC output: %d\r\n", valueV);
+		//printf("ADC output Y: %d\r\n", valueV);
 		//int outputV = normalize_output_joystick(valueV, centerV);
 		//printf("Vertical output: %d\r\n", outputV);
-	}
+	}*/
 	//***************** SENDING JOYSTICK POSITIONS OVER CAN TO NODE 2 **************/
-	/*
-	//while (1){
+	
+	while (1){
 		int valueH = adc_read(HORIZONTAL);
+		printf("ADC output X: %d\r\n", valueH);
 		int valueV = adc_read(VERTICAL);
+		printf("ADC output Y: %d\r\n\n", valueV);
 		send_position(normalize_output_joystick(valueH, centerH));
 		send_position(normalize_output_joystick(valueV, centerV));
 		_delay_ms(3000);
-	//}*/
+	}
 	/*********************************** CAN **************************************/
 	/*
 	can_init();
