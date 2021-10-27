@@ -12,8 +12,66 @@
 #include "sam.h"
 #include "printf-stdarg.h"
 
-#define DEBUG_INTERRUPT 1
+#define DEBUG_INTERRUPT 0
 
+int newMessage = 0;
+CAN_MESSAGE message;
+
+void CAN0_Handler( void )
+{
+	//if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
+	char can_sr = CAN0->CAN_SR;
+	
+	//RX interrupt
+	if(can_sr & (CAN_SR_MB1 | CAN_SR_MB2) )//Only mailbox 1 and 2 specified for receiving
+	{
+		if(can_sr & CAN_SR_MB1)  //Mailbox 1 event
+		{
+			can_receive(&message, 1);
+			 newMessage = 1;
+		}
+		else if(can_sr & CAN_SR_MB2) //Mailbox 2 event
+		{
+			can_receive(&message, 2);
+			newMessage = 1;
+		}
+		else
+		{
+			printf("CAN0 message arrived in non-used mailbox\n\r");
+		}
+
+		if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message.id);
+		if(DEBUG_INTERRUPT)printf("message data length: %d\n\rmessage data: ", message.data_length);
+		for (int i = 0; i < message.data_length; i++)
+		{
+			if(DEBUG_INTERRUPT)printf("%d ", message.data[i]);
+		}
+		if(DEBUG_INTERRUPT)printf("\n\n\r");
+	}
+	
+	if(can_sr & CAN_SR_MB0)
+	{
+		//if(DEBUG_INTERRUPT) printf("CAN0 MB0 ready to send \n\r");
+		
+		//Disable interrupt
+		CAN0->CAN_IDR = CAN_IER_MB0;
+
+	}
+
+	if(can_sr & CAN_SR_ERRP)
+	{
+		if(DEBUG_INTERRUPT)printf("CAN0 ERRP error\n\r");
+
+	}
+	if(can_sr & CAN_SR_TOVF)
+	{
+		if(DEBUG_INTERRUPT)printf("CAN0 timer overflow\n\r");
+
+	}
+	
+	NVIC_ClearPendingIRQ(ID_CAN0);
+	//sei();
+}
 
 /**
  * \brief Initialize can bus with predefined number of rx and tx mailboxes, 
@@ -198,16 +256,24 @@ uint8_t can_receive(CAN_MESSAGE* can_msg, uint8_t rx_mb_id)
 	}
 }
 
-/* Move the can handler in this file and use these functions to get the message in main
+// Move the can handler in this file and use these functions to get the message in main
 int new_message_received(void){
 	return newMessage;
 }
 
 
 CAN_MESSAGE get_message(void){
-	//if (newMessage){
 	newMessage = 0;
 	return message;
-	//}
 }
-*/
+
+void print_message(CAN_MESSAGE msg){
+	printf("new message: \n\r");
+	printf("message id: %d\n\r", msg.id);
+	printf("message data length: %d\n\rmessage data: ", msg.data_length);
+	for (int i = 0; i < msg.data_length; i++)
+	{
+		printf("%d ", msg.data[i]);
+	}
+	printf("\n\n\r");
+}

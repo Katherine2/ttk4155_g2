@@ -42,8 +42,8 @@ void send_position(int position){
 	msg.id = 1;
 	msg.length = 1;
 	msg.data[0] = (char)position;
-	printf("message id in node 1: %d\r\n", msg.id);
-	printf("message length in node 1: %d\r\n", msg.length);
-	printf("message data in node 1: %d\r\n\n", msg.data[0]);
+	//printf("message id in node 1: %d\r\n", msg.id);
+	//printf("message length in node 1: %d\r\n", msg.length);
+	//printf("message data in node 1: %d\r\n\n", msg.data[0]);
 	can_transmit(msg);
 }

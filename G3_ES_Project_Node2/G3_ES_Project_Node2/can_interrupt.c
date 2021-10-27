@@ -16,7 +16,7 @@
 #include "printf-stdarg.h"
 
 #include "can_controller.h"
-
+/*
 #define DEBUG_INTERRUPT 1
 
 /**
@@ -26,7 +26,7 @@
  *
  * \retval 
  */
-
+/*
 void CAN0_Handler( void )
 {
 	//if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
@@ -80,4 +80,4 @@ void CAN0_Handler( void )
 	
 	NVIC_ClearPendingIRQ(ID_CAN0);
 	//sei();
-}
+}*/
