@@ -12,9 +12,11 @@
 
 #include "sam.h"
 #include "can_controller.h"
-#include "pwm.h"
 #include "joystick.h"
+#include "servo.h"
+#include "ir.h"
 
+#define PASSWD_PIO_PWM 0x50494F00
 
 /*
 #define FOSC 16000000 // Clock Speed
@@ -29,20 +31,21 @@ int main(void)
     /* Initialize the SAM system */
     SystemInit();
     WDT->WDT_MR = WDT_MR_WDDIS;		//disable the watchdog timer
-	configure_uart();
-	can_init_def_tx_rx_mb(0x00290561);
+	//configure_uart();
+	//can_init_def_tx_rx_mb(0x00290561);
 
 	/******************* Receiving messages over CAN **********************/
+	/*
 	int a = 0;
 	CAN_MESSAGE msg;
 	while (1){
-		/*msg.id = 2;
+		msg.id = 2;
 		msg.data_length = 1;
 		msg.data[0] = 'x';
-		*/
+		
 		msg = get_positions();
 			
-		/*if(new_message_received()){
+		if(new_message_received()){
 			msg = get_message();
 			printf("new message: \n\r");
 			printf("message id: %d\n\r", msg.id);
@@ -52,7 +55,7 @@ int main(void)
 				printf("%d ", msg.data[i]);
 			}
 			printf("\n\n\r");
-		}*/
+		}
 	}
 	
 	/*************************** ADC *************************************/
@@ -63,6 +66,7 @@ int main(void)
 	/************************** SERVO ************************************/
 	
 	pwm_init();
+	
 	/*
 	PIOC -> PIO_PDR |= PIO_PDR_P18;		//enable peripheral control of the pin
 	PIOC -> PIO_ABSR |= PIO_ABSR_P18;	//set it to peripheral B mode

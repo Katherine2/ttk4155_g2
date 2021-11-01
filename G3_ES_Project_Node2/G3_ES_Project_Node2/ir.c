@@ -8,7 +8,7 @@
 #define PASSWD_PIO_ADC 0x41444300
 
 void adc_init(void){
-	ADC->ADC_WPMR = PASSWD_PIO_ADC;	//disable write protection
+	//ADC->ADC_WPMR = PASSWD_PIO_ADC;	//disable write protection
 	/*
 	USEQ = 0 => normal mode (because we don't know otherwise)
 	TRANSFER = 01 => 1 (because we didn't know and p.1408 said that)
@@ -23,10 +23,10 @@ void adc_init(void){
 	LOWRES = 0 => 12-bit resolution (because it makes more sense)
 	TRGSEL = 000 => don't care about the value since TRGEN is 0
 	TRGEN = 0 => Hardware triggers are disabled (because we don't know otherwise)
-	*/
+	*//*
 	ADC->ADC_MR = 00010000000000001000000010000000;
 	ADC->ADC_CHER = 0x00000001;		//enables channel 0
-	ADC->ADC_CR = 0x00000002;		//starts analog-to-digital conversion
+	ADC->ADC_CR = 0x00000002;		//starts analog-to-digital conversion*/
 	//ADC->ADC_CDR0 //the converted data is stored here for a specific channel
 	//ADC->ADC_LCDR //the last converted data of all channels is stored here with the channel number until a new conversion is complete
 }

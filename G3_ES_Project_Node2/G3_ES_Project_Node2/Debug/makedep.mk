@@ -10,11 +10,15 @@ Device_Startup\startup_sam3xa.c
 
 Device_Startup\system_sam3xa.c
 
+ir.c
+
 joystick.c
 
 main.c
 
 printf-stdarg.c
+
+servo.c
 
 uart.c
 
