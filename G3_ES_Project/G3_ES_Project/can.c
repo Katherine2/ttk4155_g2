@@ -82,7 +82,7 @@ void can_transmit(can_msg msg){
 	}
 	mcp2515_request_to_send(0);
 	
-	//printf("Sending:\r\ndata: %c\r\nlength: %d\r\nid: %d\r\n\n", msg.data[0], msg.length, msg.id);
+	printf("Sending:\r\ndata: %d\r\nlength: %d\r\nid: %d\r\n\n", msg.data[0], msg.length, msg.id);
 }
 
 ISR(INT0_vect){

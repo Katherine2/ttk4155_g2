@@ -39,11 +39,11 @@ int main(void)
 	SRAM_init();
 	can_init();
 	
-	int centerH = joystick_init(HORIZONTAL, 10);
+	//int centerH = joystick_init(HORIZONTAL, 10);
 	//printf("CENTER: %d\r\n", centerH);
 	
-	int centerV = joystick_init(VERTICAL, 10);
-	int outputH = 0;
+	//int centerV = joystick_init(VERTICAL, 10);
+	//int outputH = 0;
 	/*
 	while(1){
 		//uint8_t valueH = adc_read(HORIZONTAL);
@@ -60,11 +60,11 @@ int main(void)
 	while (1){
 		int valueH = adc_read(HORIZONTAL);
 		//printf("ADC output X: %d\r\n", valueH);
-		int valueV = adc_read(VERTICAL);
+		//int valueV = adc_read(VERTICAL);
 		//printf("ADC output Y: %d\r\n\n", valueV);
 		send_position(valueH/*normalize_output_joystick(valueH, centerH)*/);
-		send_position(valueV/*normalize_output_joystick(valueV, centerV)*/);
-		_delay_ms(3000);
+		//send_position(valueV/*normalize_output_joystick(valueV, centerV)*/);
+		_delay_ms(1000);
 	}
 	/*********************************** CAN **************************************/
 	/*

@@ -10,7 +10,8 @@
 #define IR_H_
 
 void adc_init(void);
-
+int adc_read(void);
+int is_goal(int value, int score);
 
 
 

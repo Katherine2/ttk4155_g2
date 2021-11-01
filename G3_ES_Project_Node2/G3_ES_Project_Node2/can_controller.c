@@ -261,7 +261,6 @@ int new_message_received(void){
 	return newMessage;
 }
 
-
 CAN_MESSAGE get_message(void){
 	newMessage = 0;
 	return message;

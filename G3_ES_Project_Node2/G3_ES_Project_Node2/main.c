@@ -31,20 +31,20 @@ int main(void)
     /* Initialize the SAM system */
     SystemInit();
     WDT->WDT_MR = WDT_MR_WDDIS;		//disable the watchdog timer
-	//configure_uart();
-	//can_init_def_tx_rx_mb(0x00290561);
+	configure_uart();
+	can_init_def_tx_rx_mb(0x00290561);
 
 	/******************* Receiving messages over CAN **********************/
-	/*
-	int a = 0;
-	CAN_MESSAGE msg;
-	while (1){
+	
+	//CAN_MESSAGE msg;
+	/*while (1){
+		//msg = get_positions();
+		/*
+		
 		msg.id = 2;
 		msg.data_length = 1;
 		msg.data[0] = 'x';
 		
-		msg = get_positions();
-			
 		if(new_message_received()){
 			msg = get_message();
 			printf("new message: \n\r");
@@ -55,17 +55,24 @@ int main(void)
 				printf("%d ", msg.data[i]);
 			}
 			printf("\n\n\r");
-		}
-	}
+		}*/
+	//}
 	
 	/*************************** ADC *************************************/
 	
-/*
-	
-	*/
+
+	adc_init();
+	int goal = 0;
+	int adc;
 	/************************** SERVO ************************************/
 	
 	pwm_init();
+	
+	while(1){
+		move_servo();
+		adc = adc_read();
+		goal = is_goal(adc, goal);
+	}
 	
 	/*
 	PIOC -> PIO_PDR |= PIO_PDR_P18;		//enable peripheral control of the pin
