@@ -46,8 +46,8 @@ int is_goal(int value, int score){
 	//printf("value: %d\n\r", value);
 	if(value < IR_THRESHOLD){
 		score++;
-		printf("score: %d\n\r", score);
 	}
+	printf("score: %d\n\r", score);
 	return score;
 }
 

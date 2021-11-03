@@ -58,14 +58,42 @@ int main(void)
 		}*/
 	//}
 	
-	/*************************** ADC *************************************/
+	/************************** BUTTON & Solenoid ***********************************/
+	/*
+	PIOB -> PIO_PER = PIO_PB26;
+	PIOB -> PIO_ODR = PIO_PB26;
+	PIOB -> PIO_PUDR = PIO_PB26;
+	//PMC->PMC_PCER0 |= PMC_PCER0_PID12;
 	
-
+	PIOC -> PIO_PER = PIO_PC16;		//enables input/output function
+	PIOC -> PIO_OER = PIO_PC16;		//sets pin PC16 (pin 47) as output
+	PIOC -> PIO_PUDR = PIO_PC16;
+	while(1){
+		int pin_status = PIOB->PIO_PDSR & PIO_PDSR_P22;
+		printf("button value: %d\n\r", pin_status);
+		/*if (PIOA -> PIO_PDSR_P19){
+			PIOC -> PIO_CODR = PIO_PC16;
+		}
+		else{
+			PIOC -> PIO_SODR = PIO_PC16;
+		}
+		/*PIOC -> PIO_SODR = PIO_PC16;	//sets output data register
+		for(int i = 0; i < 30000000; i++){
+			j++;
+		}
+		PIOC -> PIO_CODR = PIO_PC16;	//clear output data register
+		for(int i = 0; i < 30000000; i++){
+			j++;
+		}*/
+//	}
+	
+	/*************************** ADC *************************************/
+	/*
 	adc_init();
 	int goal = 0;
 	int adc;
 	/************************** SERVO ************************************/
-	
+	/*
 	pwm_init();
 	
 	while(1){
@@ -74,6 +102,35 @@ int main(void)
 		goal = is_goal(adc, goal);
 	}
 	
+	/*************************** MOTOR BOX *************************************/
+	//DAC
+	PMC->PMC_PCER1 |= PMC_PCER1_PID38; //enable clock for DACC
+	REG_DACC_MR = DACC_MR_REFRESH(10) | DACC_MR_USER_SEL_CHANNEL1;
+	REG_DACC_CHER = DACC_CHER_CH1;
+	//REG_DACC_CDR //USE THIS TO SEND JOYSTICK POS
+	
+	//MotorBox
+	PIOD -> PIO_PER = PIO_PD0;		//enables input/output function
+	PIOD -> PIO_OER = PIO_PD0;		//sets pin PA19 (pin 42) as output
+	PIOD -> PIO_PUDR = PIO_PD0;		//disables pull-ups
+	//PIOD -> PIO_CODR = PIO_PD0;	//set OE to low
+	//PIOD -> PIO_SODR = PIO_PD0;
+	/*************************** SOLENOID *************************************/
+/*
+	PIOC -> PIO_PER = PIO_PC16; //enables input/output function
+	PIOC -> PIO_OER = PIO_PC16;		//sets pin PC16 (pin 47) as output
+	PIOC -> PIO_PUDR = PIO_PC16;	//disables pull-ups
+	int j = 0;
+	while(1){
+		PIOC -> PIO_SODR = PIO_PC16;	//sets output data register
+		for(int i = 0; i < 30000000; i++){
+			j++;
+		}
+		PIOC -> PIO_CODR = PIO_PC16;	//clear output data register
+		for(int i = 0; i < 30000000; i++){
+			j++;
+		}
+	}
 	/*
 	PIOC -> PIO_PDR |= PIO_PDR_P18;		//enable peripheral control of the pin
 	PIOC -> PIO_ABSR |= PIO_ABSR_P18;	//set it to peripheral B mode

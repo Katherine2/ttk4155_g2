@@ -64,7 +64,7 @@ int main(void)
 		//printf("ADC output Y: %d\r\n\n", valueV);
 		send_position(valueH/*normalize_output_joystick(valueH, centerH)*/);
 		//send_position(valueV/*normalize_output_joystick(valueV, centerV)*/);
-		_delay_ms(1000);
+		_delay_ms(10);
 	}
 	/*********************************** CAN **************************************/
 	/*

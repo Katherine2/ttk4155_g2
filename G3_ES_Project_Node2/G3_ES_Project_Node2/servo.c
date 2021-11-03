@@ -51,14 +51,14 @@ void move_to(char pos){
 	//associate postion to pwm duty cycle
 	//calls set_duty_cycle among other things
 	//if the joystick is towards the left, set the duty cycle to 1.0
-	printf("pos: %d \n\r", (int)pos);	
+	//printf("pos: %d \n\r", (int)pos);	
 	if ((int)pos < LEFT_CUTOFF){
 		//printf("left\n\r");
 		set_duty_cycle(RIGHT);
 	}
 	//if the joystick is in the center, set the duty cycle to 1.5
 	else if ((LEFT_CUTOFF < (int)pos) && ( (int)pos < RIGHT_CUTOFF)){
-		printf("center \n\r");
+		//printf("center \n\r");
 		set_duty_cycle(CENTER);
 	}
 	//if the joystick is towards the right, set the duty cycle to 2.0
