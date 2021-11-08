@@ -58,12 +58,16 @@ int main(void)
 	//***************** SENDING JOYSTICK POSITIONS OVER CAN TO NODE 2 **************/
 	
 	while (1){
-		int valueH = adc_read(HORIZONTAL);
+		//int valueH = adc_read(HORIZONTAL);
 		//printf("ADC output X: %d\r\n", valueH);
 		//int valueV = adc_read(VERTICAL);
 		//printf("ADC output Y: %d\r\n\n", valueV);
-		send_position(valueH/*normalize_output_joystick(valueH, centerH)*/);
+		//send_position_horizontal(valueH/*normalize_output_joystick(valueH, centerH)*/);
 		//send_position(valueV/*normalize_output_joystick(valueV, centerV)*/);
+		
+		int button_status = get_button_status();
+		send_button_status(button_status);
+		//printf("Button status: %d\n\r", button_status);
 		_delay_ms(10);
 	}
 	/*********************************** CAN **************************************/

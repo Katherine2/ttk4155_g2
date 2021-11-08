@@ -10,7 +10,7 @@
 #define JOYSTICK_H_
 
 CAN_MESSAGE get_positions();
-
+void button_pressed(CAN_MESSAGE message);
 
 
 

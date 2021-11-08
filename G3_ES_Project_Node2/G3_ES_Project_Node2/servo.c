@@ -40,9 +40,9 @@ void pwm_init(void){
 	PWM->PWM_ENA |= PWM_ENA_CHID6; // enable PWM channel 6
 }
 
-void move_servo(void){
-	CAN_MESSAGE position;
-	position = get_positions();
+void move_servo(CAN_MESSAGE position){
+	//CAN_MESSAGE position;
+	//position = get_positions();
 	printf("position: %d \n\r", position.data[0]);
 	move_to(position.data[0]);
 }

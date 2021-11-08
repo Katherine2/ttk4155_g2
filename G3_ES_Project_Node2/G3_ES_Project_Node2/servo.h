@@ -11,7 +11,7 @@
 #define SERVO_H_
 
 void pwm_init(void);
-void move_servo(void);
+void move_servo(CAN_MESSAGE position);
 void move_to(char pos);
 void set_duty_cycle(float dutyCycle);
 

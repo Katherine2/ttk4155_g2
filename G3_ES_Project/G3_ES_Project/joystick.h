@@ -16,7 +16,10 @@
 
 int joystick_init(uint8_t channel, int samples);
 int normalize_output_joystick(uint8_t value, int center);
-void send_position(int position);
+void send_position_horizontal(int position);
+void send_position_vertical(int position);
+void send_button_status(int status);
+int get_button_status(void);
 
 
 #endif /* JOYSTICK_H_ */

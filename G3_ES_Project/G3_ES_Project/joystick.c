@@ -36,12 +36,41 @@ int normalize_output_joystick(uint8_t value, int center){
 	return position;
 }
 
-void send_position(int position){
+int get_button_status(void){
+	DDRD |= (0 << PD0);
+	int status = PIND & 0x01;
+	printf("Button status: %d\n\r", status);
+	return status;
+}
+
+void send_position_horizontal(int position){
 	//printf("position: %d\r\n", position);
 	can_msg msg;
-	msg.id = 1;
+	msg.id = 1;		//id 1 for horizontal position
 	msg.length = 1;
 	msg.data[0] = (char)position;
+	//printf("message id in node 1: %d\r\n", msg.id);
+	//printf("message length in node 1: %d\r\n", msg.length);
+	//printf("message data in node 1: %d\r\n\n", msg.data[0]);
+	can_transmit(msg);
+}
+
+void send_position_vertical(int position){
+	can_msg msg;
+	msg.id = 2;		//id 2 for horizontal position
+	msg.length = 1;
+	msg.data[0] = (char)position;
+	//printf("message id in node 1: %d\r\n", msg.id);
+	//printf("message length in node 1: %d\r\n", msg.length);
+	//printf("message data in node 1: %d\r\n\n", msg.data[0]);
+	can_transmit(msg);
+}
+
+void send_button_status(int status){
+	can_msg msg;
+	msg.id = 3;		//id 3 for button
+	msg.length = 1;
+	msg.data[0] = (char)status;
 	//printf("message id in node 1: %d\r\n", msg.id);
 	//printf("message length in node 1: %d\r\n", msg.length);
 	//printf("message data in node 1: %d\r\n\n", msg.data[0]);
