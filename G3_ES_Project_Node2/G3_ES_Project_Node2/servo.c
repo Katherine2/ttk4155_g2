@@ -12,8 +12,8 @@
 #define PASSWD_PIO_PWM 0x50494F00
 #define MIN_DUTY_CYCLE 19000
 #define MAX_DUTY_CYCLE 18000
-#define LEFT_CUTOFF	100
-#define RIGHT_CUTOFF 200
+#define LEFT_CUTOFF	70
+#define RIGHT_CUTOFF 130
 #define LEFT 1.0
 #define CENTER 1.5
 #define RIGHT 2.0
@@ -40,31 +40,34 @@ void pwm_init(void){
 	PWM->PWM_ENA |= PWM_ENA_CHID6; // enable PWM channel 6
 }
 
-void move_servo(CAN_MESSAGE position){
+void move_servo(int joystick_position){
 	//CAN_MESSAGE position;
 	//position = get_positions();
-	printf("position: %d \n\r", position.data[0]);
-	move_to(position.data[0]);
+	//printf("position: %d \n\r", joystick_position);
+	move_to(joystick_position);
 }
 
 void move_to(char pos){
-	//associate postion to pwm duty cycle
+	//associate position to pwm duty cycle
 	//calls set_duty_cycle among other things
 	//if the joystick is towards the left, set the duty cycle to 1.0
 	//printf("pos: %d \n\r", (int)pos);	
 	if ((int)pos < LEFT_CUTOFF){
 		//printf("left\n\r");
-		set_duty_cycle(RIGHT);
+		int dty = 20000 - 1000*2.0;
+		set_duty_cycle(dty);
 	}
 	//if the joystick is in the center, set the duty cycle to 1.5
 	else if ((LEFT_CUTOFF < (int)pos) && ( (int)pos < RIGHT_CUTOFF)){
 		//printf("center \n\r");
-		set_duty_cycle(CENTER);
+		int dty = 20000 - 1000*1.5;
+		set_duty_cycle(dty);
 	}
 	//if the joystick is towards the right, set the duty cycle to 2.0
 	else if (RIGHT_CUTOFF < (int)pos) {
 		//printf("right\n\r");
-		set_duty_cycle(LEFT);
+		int dty = 20000 - 1000*1.0;
+		set_duty_cycle(dty);
 	}
 	else{
 		printf("ERROR! Invalid position");
@@ -72,16 +75,16 @@ void move_to(char pos){
 	//if the joystick is in the center, set the duty cycle to 1.5
 }
 
-void set_duty_cycle(float dutyCycle){
+void set_duty_cycle(int dty){
 	//calculates what value to set the REG_PWM_CDTY6 register to and then sets it to that value
 	//the range of the CDTY6 must be between 18000 (2 ms duty cycle) and 19000 (1 ms duty cycle)
-	//printf("cycle: %f\n\r", dutyCycle);
-	int dty = 20000 - 1000*dutyCycle;
+	//printf("cycle: %d\n\r", dutyCycle);
+	//int dty = 20000 - 1000*dutyCycle;
 	//printf("duty cycle: %d\n\r", dty);
 	if((MAX_DUTY_CYCLE <= dty) && (dty <= MIN_DUTY_CYCLE)){
 		REG_PWM_CDTY6 = dty;
 	}
 	else{
-		printf("ERROR! Duty cycle out of range. Must be between 1 and 2/n/r");
+		printf("ERROR! Duty cycle out of range. Must be between 1 and 2\n\r");
 	}
 }

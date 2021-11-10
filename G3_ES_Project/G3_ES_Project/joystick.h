@@ -20,6 +20,7 @@ void send_position_horizontal(int position);
 void send_position_vertical(int position);
 void send_button_status(int status);
 int get_button_status(void);
+void send_calibration(int position, int id);
 
 
 #endif /* JOYSTICK_H_ */

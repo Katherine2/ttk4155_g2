@@ -56,19 +56,28 @@ int main(void)
 		//printf("Vertical output: %d\r\n", outputV);
 	}*/
 	//***************** SENDING JOYSTICK POSITIONS OVER CAN TO NODE 2 **************/
+	for(int i = 0; i < 10; i++){
+		int calibrateH = adc_read(HORIZONTAL);
+		send_calibration(calibrateH, 4);
+		int calibrateV = adc_read(VERTICAL);
+		send_calibration(calibrateV, 5);
+		_delay_ms(100);
+	}
 	
 	while (1){
-		//int valueH = adc_read(HORIZONTAL);
+		int valueH = adc_read(HORIZONTAL);
 		//printf("ADC output X: %d\r\n", valueH);
 		//int valueV = adc_read(VERTICAL);
 		//printf("ADC output Y: %d\r\n\n", valueV);
-		//send_position_horizontal(valueH/*normalize_output_joystick(valueH, centerH)*/);
-		//send_position(valueV/*normalize_output_joystick(valueV, centerV)*/);
+		send_position_horizontal(valueH/*normalize_output_joystick(valueH, centerH)*/);
+		//_delay_ms(100);
+		//send_position_vertical(valueV/*normalize_output_joystick(valueV, centerV)*/);
+		//_delay_ms(100);
 		
-		int button_status = get_button_status();
-		send_button_status(button_status);
+		//int button_status = get_button_status();
+		//send_button_status(button_status);
 		//printf("Button status: %d\n\r", button_status);
-		_delay_ms(10);
+		_delay_ms(100);
 	}
 	/*********************************** CAN **************************************/
 	/*

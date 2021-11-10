@@ -36,6 +36,15 @@ int normalize_output_joystick(uint8_t value, int center){
 	return position;
 }
 
+void send_calibration(int position, int id){
+	//id 4 is horizontal, id 5 is vertical
+	can_msg msg;
+	msg.id = id;
+	msg.length = 1;
+	msg.data[0] = (char) position;
+	can_transmit(msg);
+}
+
 int get_button_status(void){
 	DDRD |= (0 << PD0);
 	int status = PIND & 0x01;
