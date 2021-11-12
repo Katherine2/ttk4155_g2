@@ -12,11 +12,15 @@
 #define PASSWD_PIO_PWM 0x50494F00
 #define MIN_DUTY_CYCLE 19000
 #define MAX_DUTY_CYCLE 18000
-#define LEFT_CUTOFF	70
-#define RIGHT_CUTOFF 130
-#define LEFT 1.0
+#define MAX_BOTTOM_CUTOFF	30
+#define MAX_TOP_CUTOFF 170
+#define BOTTOM_CUTOFF	70
+#define TOP_CUTOFF 130
+#define COMPLETE_LEFT 2.0
+#define LEFT 1.75
 #define CENTER 1.5
-#define RIGHT 2.0
+#define RIGHT 1.25
+#define COMPLETE_RIGHT 1.0
 
 void pwm_init(void){
 	PIOC -> PIO_PDR |= PIO_PDR_P18;		//enable peripheral control of the pin
@@ -40,39 +44,38 @@ void pwm_init(void){
 	PWM->PWM_ENA |= PWM_ENA_CHID6; // enable PWM channel 6
 }
 
+/*
 void move_servo(int joystick_position){
 	//CAN_MESSAGE position;
 	//position = get_positions();
 	//printf("position: %d \n\r", joystick_position);
 	move_to(joystick_position);
 }
+*/
 
-void move_to(char pos){
+void move_servo(int pos){
 	//associate position to pwm duty cycle
 	//calls set_duty_cycle among other things
-	//if the joystick is towards the left, set the duty cycle to 1.0
-	//printf("pos: %d \n\r", (int)pos);	
-	if ((int)pos < LEFT_CUTOFF){
-		//printf("left\n\r");
-		int dty = 20000 - 1000*2.0;
-		set_duty_cycle(dty);
+	int dty = 20000 - 1000*CENTER;
+	if (pos < MAX_BOTTOM_CUTOFF){
+		dty = 20000 - 1000*COMPLETE_LEFT;
 	}
-	//if the joystick is in the center, set the duty cycle to 1.5
-	else if ((LEFT_CUTOFF < (int)pos) && ( (int)pos < RIGHT_CUTOFF)){
-		//printf("center \n\r");
-		int dty = 20000 - 1000*1.5;
-		set_duty_cycle(dty);
+	else if ((MAX_BOTTOM_CUTOFF < pos) && (pos < BOTTOM_CUTOFF)){
+		dty = 20000 - 1000*LEFT;
 	}
-	//if the joystick is towards the right, set the duty cycle to 2.0
-	else if (RIGHT_CUTOFF < (int)pos) {
-		//printf("right\n\r");
-		int dty = 20000 - 1000*1.0;
-		set_duty_cycle(dty);
+	else if ((BOTTOM_CUTOFF < pos) && (pos < TOP_CUTOFF)){
+		dty = 20000 - 1000*CENTER;
+	}
+	else if ((TOP_CUTOFF < pos) && (pos < MAX_TOP_CUTOFF)){
+		dty = 20000 - 1000*RIGHT;
+	}
+	else if (pos > MAX_TOP_CUTOFF) {
+		dty = 20000 - 1000*COMPLETE_RIGHT;
 	}
 	else{
 		printf("ERROR! Invalid position");
 	}
-	//if the joystick is in the center, set the duty cycle to 1.5
+	set_duty_cycle(dty);
 }
 
 void set_duty_cycle(int dty){

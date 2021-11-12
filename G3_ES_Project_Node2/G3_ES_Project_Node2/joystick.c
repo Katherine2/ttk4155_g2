@@ -17,48 +17,37 @@ int centerV, centerH;
 CAN_MESSAGE get_positions(void){
 	if(new_message_received()){
 		msg = get_message();
-		print_message(msg);
-		if(msg.id == 1){
-			//joystick horizontal position
-			int new_data = normalize_position(msg, centerH);
-			printf("center: %d, new data: %d\n\r", centerH, new_data);
-			move_motor(new_data, 100);
-			return msg;
-		}
-		else if(msg.id == 2){
-			//joystick vertical position
-			int new_data = normalize_position(msg, centerV);
-			//printf("center: %d, new data: %d\n\r", centerH, new_data);
-			move_servo(new_data);
-			return msg;
-		}
-		else if(msg.id == 3){
-			//joystick button
-			button_pressed(msg);
-			return msg;
-		}
-		else if(msg.id == 4){
-			//horizontal calibration
-			centerH = calibrate_center(msg);
-			printf("center H: %d\n\r", centerH);
-		}
-		else if(msg.id == 5){
-			//vertical calibration
-			centerV = calibrate_center(msg);
-			printf("center V: %d\n\r", centerV);
-		}
-		//printf("message data: %d \n\r", msg.data[0]);
+		//print_message(msg);
+		
+		//get centers
+		centerH = (int)msg.data[3];
+		centerV = (int)msg.data[4];
+		
+		//joystick horizontal position
+		int new_data_H = normalize_position(msg.data[0], centerH);
+		//printf("h data: %d\n\r", msg.data[0]);
+		//printf("center H: %d, new data H: %d\n\r", centerH, new_data_H);
+		move_motor(new_data_H);
+		
+		//joystick vertical position
+		int new_data_V = normalize_position(msg.data[1], centerV);
+		//printf("v data: %d\n\r", msg.data[1]);
+		//printf("center V: %d, new data V: %d\n\r", centerV, new_data_V);
+		move_servo(new_data_V);
+		//joystick button
+		button_pressed(msg.data[2]);
+		//printf("button: %d\n\r", msg.data[2]);
 	}
 	return msg;
 }
 
-void button_pressed(CAN_MESSAGE message){
+void button_pressed(char d){
 	//printf("button\n\r");
 	PIOC -> PIO_PER = PIO_PC16;		//enables input/output function
 	PIOC -> PIO_OER = PIO_PC16;		//sets pin PC16 (pin 47) as output
 	PIOC -> PIO_PUDR = PIO_PC16;	//disables pull-ups
-	if(message.data[0] == 0){
-		printf("button pressed\n\r");
+	if((int)d == 0){
+		//printf("button pressed\n\r");
 		PIOC -> PIO_SODR = PIO_PC16;	//sets output data register
 	}
 	else{
@@ -66,8 +55,8 @@ void button_pressed(CAN_MESSAGE message){
 	}
 }
 
-int normalize_position(CAN_MESSAGE message, int center){
-		int value = (int)message.data[0];
+int normalize_position(char d, int center){
+		int value = (int)d;
 		int position = 0;
 		if((int)value <= center){
 			position = (((float)value/(float)center)*100);
@@ -78,10 +67,10 @@ int normalize_position(CAN_MESSAGE message, int center){
 		return position;
 }
 
-int calibrate_center(CAN_MESSAGE message){
+int calibrate_center(char d){
 	int value, center;
 	for (int i = 0; i < 10; i++){
-		value = (int)message.data[0];
+		value = (int)d;
 		center = center + value;
 	}
 	center = center/10;

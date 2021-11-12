@@ -40,13 +40,18 @@ int main(void) {
 	motorbox_init();
 	dac_init();
 	pwm_init();
-	printf("here \n\r");
-	while(1) {
-		message = get_positions();
+	adc_init();
+	delay_us(1000000);
+	start_game();
+	/*while(1) {
+		//adc = adc_read();
+		//printf("ir value: %d\n\r", adc);
+		//goal = is_goal(adc, goal);
+		//message = get_positions();
 		//uint16_t data = receive_data();
 		//printf("data: %d\n\r", data);
 		//delay_us(1000000000);
 	}
-	return 0;
+	return 0;*/
 }
 

@@ -13,7 +13,7 @@
 void motorbox_init(void);
 uint16_t receive_data(void);
 void dac_init(void);
-void move_motor(int joystick_position, int center);
+void move_motor(int joystick_position);
 
 
 #endif /* MOTORBOX_H_ */

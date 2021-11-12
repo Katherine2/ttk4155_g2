@@ -69,7 +69,14 @@ void can_receive(void){
 		mcp2515_bit_modify(MCP_CANINTF,0x02, 0x00);
 	}
 			
-	printf("data: %c\r\nlength: %d\r\nid: %d\r\n\n", msg.data[0], msg.length, msg.id);
+	printf("new message: \n\r");
+	printf("message id: %d\n\r", msg.id);
+	printf("message data length: %d\n\rmessage data: ", msg.length);
+	for (int i = 0; i < msg.length; i++)
+	{
+		printf("%d ", msg.data[i]);
+	}
+	printf("\n\n\r");
 }
 
 void can_transmit(can_msg msg){
@@ -82,7 +89,14 @@ void can_transmit(can_msg msg){
 	}
 	mcp2515_request_to_send(0);
 	
-	printf("Sending:\r\ndata: %d\r\nlength: %d\r\nid: %d\r\n\n", msg.data[0], msg.length, msg.id);
+	printf("new message: \n\r");
+	printf("message id: %d\n\r", msg.id);
+	printf("message data length: %d\n\rmessage data: ", msg.length);
+	for (int i = 0; i < msg.length; i++)
+	{
+		printf("%d ", msg.data[i]);
+	}
+	printf("\n\n\r");
 }
 
 ISR(INT0_vect){

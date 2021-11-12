@@ -11,8 +11,8 @@
 #define JOYSTICK_H_
 
 CAN_MESSAGE get_positions();
-void button_pressed(CAN_MESSAGE message);
-int normalize_position(CAN_MESSAGE message, int center);
-
+void button_pressed(char d);
+int normalize_position(char d, int center);
+int calibrate_center(char d);
 
 #endif /* JOYSTICK_H_ */

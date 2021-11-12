@@ -11,8 +11,6 @@
 
 #define LEFT_CUTOFF	70
 #define RIGHT_CUTOFF 130
-//#define LEFT_CUTOFF	100
-//#define RIGHT_CUTOFF 200
 
 void dac_init(void){
 	PMC->PMC_PCER1 |= PMC_PCER1_PID38; //enable clock for DACC
@@ -92,7 +90,7 @@ void reset(void){
 	PIOD -> PIO_SODR = PIO_PD0;
 }*/
 
-void move_motor(int joystick_position, int center){
+void move_motor(int joystick_position){
 	if((joystick_position) < LEFT_CUTOFF){
 		PIOD -> PIO_CODR = PIO_PD10;
 		REG_DACC_CDR = 0xFFF - (joystick_position << 5);

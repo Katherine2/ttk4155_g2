@@ -9,7 +9,7 @@
 #include "sam.h"
 
 #define PASSWD_PIO_ADC 0x41444300
-#define IR_THRESHOLD 3000
+#define IR_THRESHOLD 300
 
 void adc_init(void){
 	PMC->PMC_PCER1 |= PMC_PCER1_PID37;//(1 << 6);		//enable ADC clock
@@ -46,6 +46,7 @@ int is_goal(int value, int score){
 	//printf("value: %d\n\r", value);
 	if(value < IR_THRESHOLD){
 		score++;
+		pause_game(score);
 	}
 	printf("score: %d\n\r", score);
 	return score;

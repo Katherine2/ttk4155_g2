@@ -9,11 +9,11 @@
 #ifndef MENU_H_
 #define MENU_H_
 
-void menu_init();
-void navigate_menu(int row);
-void select_item();
-void display_main_menu();
-
+void menu_init(void);
+void navigate_menu(void);
+void select_item(int row);
+void display_main_menu(void);
+void start_game(void);
 
 
 #endif /* MENU_H_ */

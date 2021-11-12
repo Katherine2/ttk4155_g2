@@ -6,6 +6,8 @@ can_controller.c
 
 can_interrupt.c
 
+game.c
+
 handmade_delay.c
 
 Device_Startup\motorbox.c

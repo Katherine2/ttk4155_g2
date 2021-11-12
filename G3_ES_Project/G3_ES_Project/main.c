@@ -29,8 +29,7 @@
 #define HORIZONTAL 0
 #define VERTICAL 1
 
-int main(void)
-{	int rec;
+int main(void){	
 	USART_Init(MYUBRR);
 	
 	fdevopen(USART_Transmit, USART_Receive);
@@ -38,108 +37,23 @@ int main(void)
 	clock_timer();
 	SRAM_init();
 	can_init();
-	
-	//int centerH = joystick_init(HORIZONTAL, 10);
-	//printf("CENTER: %d\r\n", centerH);
-	
-	//int centerV = joystick_init(VERTICAL, 10);
-	//int outputH = 0;
-	/*
-	while(1){
-		//uint8_t valueH = adc_read(HORIZONTAL);
-		//printf("ADC output X: %d\r\n", valueH);
-		//outputH = normalize_output_joystick(valueH, centerH);
-		//printf("Horizontal output: %d\r\n", outputH);
-		int valueV = adc_read(VERTICAL);
-		printf("ADC output Y: %d\r\n", valueV);
-		int outputV = normalize_output_joystick(valueV, centerV);
-		//printf("Vertical output: %d\r\n", outputV);
-	}*/
-	//***************** SENDING JOYSTICK POSITIONS OVER CAN TO NODE 2 **************/
-	for(int i = 0; i < 10; i++){
-		int calibrateH = adc_read(HORIZONTAL);
-		send_calibration(calibrateH, 4);
-		int calibrateV = adc_read(VERTICAL);
-		send_calibration(calibrateV, 5);
-		_delay_ms(100);
-	}
-	
-	while (1){
-		int valueH = adc_read(HORIZONTAL);
-		//printf("ADC output X: %d\r\n", valueH);
-		//int valueV = adc_read(VERTICAL);
-		//printf("ADC output Y: %d\r\n\n", valueV);
-		send_position_horizontal(valueH/*normalize_output_joystick(valueH, centerH)*/);
-		//_delay_ms(100);
-		//send_position_vertical(valueV/*normalize_output_joystick(valueV, centerV)*/);
-		//_delay_ms(100);
-		
-		//int button_status = get_button_status();
-		//send_button_status(button_status);
-		//printf("Button status: %d\n\r", button_status);
-		_delay_ms(100);
-	}
-	/*********************************** CAN **************************************/
-	/*
-	can_init();
-	can_msg a;
-	a.id = 2;
-	a.length = 3;
-	a.data[0] = '#';
-	while(1) {
-		//a.data[0] = a.data[0]+1;
-		can_transmit(a);
-		_delay_ms(1000);
-	}
-	*/
-	/********************************** OLED ***********************************/
-	/*
-	SRAM_init();
 	OLED_init();
 	
-	menu_init();
-	*/
+	//int centerH = calibrate_joystick_center(HORIZONTAL, 10);
+	//int centerV = calibrate_joystick_center(VERTICAL, 10);
 	
-	/********************************** ADC **********************************/
-	/* 
-	clock_timer();
-	SRAM_init();
-	
-	printf("center: %d\r\n", center);
-	int norm_val = 0;
-	while(1) {
-		uint8_t v = adc_read(0);
-		//printf("value: %d\r\n", v);
-		norm_val = normalize_output_joystick(v, center);
-		printf("normalized value: %d\r\n", norm_val);
-		printf("value: %d\r\n\n", v);
+	while (1){		
+		menu_init();
+		/*
+		//printf("center h: %d, center v: %d\n\r", centerH, centerV);
+		int valueH = adc_read(HORIZONTAL);
+		//printf("adc horizontal value: %d\n\r", valueH);
+		int valueV = adc_read(VERTICAL);
+		int button_status = get_button_status();
+		//printf("main function hdata: %d, vdata: %d, bstat: %d, hcenter:%d, vcenter:%d\n\r", valueH, valueV, button_status, centerH, centerV);
+		send_joystick_status(valueH, valueV, button_status, centerH, centerV);
+		_delay_ms(50);*/
 	}
-	*/
-	
-	/********************************* SRAM *************************************/
-	//SRAM_init();
-	//SRAM_test();	
-	
-	
-	/* Latch in PastFiles
-	DDRA |= (1 << PA7);
-	DDRE |= (1 << PE1);
-	PORTA = 0x1;
-	PORTE = 0x02;
-	PORTA |= (1 << PA7);
-	_delay_ms(1000);
-	PORTE = 0x00;
-	PORTA &= ~(1 << PA7);
-	_delay_ms(100);
-	*/
-	
-	/*********************************** UART **************************************/
-	/* 
-	while (1) {
-		char c = USART_Receive();
-		
-		printf("Character received: %c\r\n", c);
-	}*/
 }
 
 
