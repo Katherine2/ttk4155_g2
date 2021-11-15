@@ -70,16 +70,17 @@ void motorbox_init(void){
 	PIOD -> PIO_SODR = PIO_PD1;		//set !RES to high
 }
 
-uint16_t receive_data(void){
+int16_t receive_data(void){
+	int16_t data;
 	PIOD -> PIO_CODR = PIO_PD0;		//set !OE to low
 	PIOD -> PIO_CODR = PIO_PD2;		//set SEL to low
 	delay_us(1000000);					//wait 20 microseconds
-	uint16_t msb = (PIOC->PIO_PDSR >> 1) & 0xFF ;	//read MSB
+	data |= ((PIOC->PIO_PDSR >> 1) & 0xFF) << 8 ;	//read MSB
 	PIOD -> PIO_SODR = PIO_PD2;		//set SEL to high
 	delay_us(1000000);					//wait 20 microseconds
-	uint16_t lsb = (PIOC->PIO_PDSR >> 1) & 0xFF ;	//read LSB
+	data |= (PIOC->PIO_PDSR >> 1) & 0xFF ;	//read LSB
 	PIOD -> PIO_SODR = PIO_PD0;		//set !OE to high
-	return lsb | (msb << 8);
+	return data; //lsb | (msb << 8);
 }
 /*
 void reset(void){

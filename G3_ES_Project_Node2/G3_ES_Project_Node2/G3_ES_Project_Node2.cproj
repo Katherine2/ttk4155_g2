@@ -216,6 +216,12 @@
     <Compile Include="motorbox.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="PID.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="PID.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="printf-stdarg.c">
       <SubType>compile</SubType>
     </Compile>
@@ -226,6 +232,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="servo.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="stdint.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uart.c">

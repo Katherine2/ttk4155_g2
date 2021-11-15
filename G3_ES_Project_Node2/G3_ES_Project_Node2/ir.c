@@ -48,7 +48,7 @@ int is_goal(int value, int score){
 		score++;
 		pause_game(score);
 	}
-	printf("score: %d\n\r", score);
+	//printf("score: %d\n\r", score);
 	return score;
 }
 

@@ -20,12 +20,12 @@ void start_game(){
 	while(1) {
 		if(playing && !game_end){
 			adc = adc_read();
-			printf("ir value: %d\n\r", adc);
+			//printf("ir value\n\r");
 			goal = is_goal(adc, goal);
 			msg = get_positions();
-			//uint16_t data = receive_data();
-			//printf("data: %d\n\r", data);
-			//delay_us(1000000000);
+			int16_t data = receive_data();
+			printf("data: %d\n\r", data);
+			delay_us(100000);
 		}
 		else{
 			if(new_message_received()){

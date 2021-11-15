@@ -43,7 +43,7 @@ void display_main_menu(void){
 	OLED_pos(4, 15);
 	OLED_print_string("Instructions");
 	OLED_pos(6, 15);
-	OLED_print_string("Calibrate");
+	OLED_print_string("Display Center");
 	currentRow = 0;
 }
 
@@ -135,19 +135,23 @@ void select_item(int row){
 	}
 	else if (row == 6){
 		//calibrate joystick
+		//sprintf
+		char buffer[10];
 		OLED_pos(0,15);
-		OLED_print_string("Calibrating...");
-		centerX = calibrate_joystick_center(HORIZONTAL, 10);
-		centerY = calibrate_joystick_center(VERTICAL, 10);
+		OLED_print_string("Center values");
+		//centerX = calibrate_joystick_center(HORIZONTAL, 10);
+		//centerY = calibrate_joystick_center(VERTICAL, 10);
 		printf("x: %d, y: %d\n\r", centerX, centerY);
 		OLED_pos(2,15);
 		OLED_print_string("X center: ");
 		OLED_pos(3, 15);
-		OLED_print_string((char) centerX);
+		sprintf(buffer, "%d", centerX);
+		OLED_print_string(buffer);
 		OLED_pos(4,15);
 		OLED_print_string("Y center: ");
 		OLED_pos(5,15);
-		OLED_print_string((char) centerY);
+		sprintf(buffer, "%d", centerY);
+		OLED_print_string(buffer);
 	}
 	
 	navigate_menu();
