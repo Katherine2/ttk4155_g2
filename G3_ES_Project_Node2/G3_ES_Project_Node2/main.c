@@ -41,6 +41,8 @@ int main(void) {
 	dac_init();
 	pwm_init();
 	adc_init();
+	pid_Init();
+	float a = 1.5;
 	delay_us(1000000);
 	start_game();
 	/*while(1) {

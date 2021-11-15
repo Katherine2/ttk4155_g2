@@ -23,8 +23,9 @@ void start_game(){
 			//printf("ir value\n\r");
 			goal = is_goal(adc, goal);
 			msg = get_positions();
-			int16_t data = receive_data();
-			printf("data: %d\n\r", data);
+			//int16_t data = receive_data();
+			//int pos = calibrate_motor(data);			
+			//printf("data: %d\n\rpos: %d\n\r", data, pos);
 			delay_us(100000);
 		}
 		else{

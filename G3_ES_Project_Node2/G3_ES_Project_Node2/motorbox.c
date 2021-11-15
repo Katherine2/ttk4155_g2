@@ -5,12 +5,14 @@
  *  Author: zahrajm
  */ 
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "motorbox.h"
 #include "sam.h"
 #include "handmade_delay.h"
 
-#define LEFT_CUTOFF	70
-#define RIGHT_CUTOFF 130
+#define LEFT_CUTOFF	50
+#define RIGHT_CUTOFF 150
 
 void dac_init(void){
 	PMC->PMC_PCER1 |= PMC_PCER1_PID38; //enable clock for DACC
@@ -41,25 +43,7 @@ void motorbox_init(void){
 	//EN
 	PIOD -> PIO_PER = PIO_PD9;		//enables input/output function
 	PIOD -> PIO_OER = PIO_PD9;		//enables output
-	/*
-	//data bits
-	PIOC -> PIO_PER = PIO_PC8;		//enables input/output function
-	//PIOC -> PIO_ODR = PIO_PC8;		//disables output
-	PIOC -> PIO_PER = PIO_PC7;		//enables input/output function
-	//PIOC -> PIO_ODR = PIO_PC7;		//disables output
-	PIOC -> PIO_PER = PIO_PC6;		//enables input/output function
-	//PIOC -> PIO_ODR = PIO_PC6;		//disables output
-	PIOC -> PIO_PER = PIO_PC5;		//enables input/output function
-	//PIOC -> PIO_ODR = PIO_PC5;		//disables output
-	PIOC -> PIO_PER = PIO_PC4;		//enables input/output function
-	//PIOC -> PIO_ODR = PIO_PC4;		//disables output
-	PIOC -> PIO_PER = PIO_PC3;		//enables input/output function
-	//PIOC -> PIO_ODR = PIO_PC3;		//disables output
-	PIOC -> PIO_PER = PIO_PC2;		//enables input/output function
-	//PIOC -> PIO_ODR = PIO_PC2;		//disables output
-	PIOC -> PIO_PER = PIO_PC1;		//enables input/output function
-	//PIOC -> PIO_ODR = PIO_PC1;		//disables output
-	*/
+
 	PIOC -> PIO_IFER = (0xFF << 1);
 	PIOC -> PIO_PUDR = (0xFF << 1);		//disables pull down register
 	
@@ -82,22 +66,38 @@ int16_t receive_data(void){
 	PIOD -> PIO_SODR = PIO_PD0;		//set !OE to high
 	return data; //lsb | (msb << 8);
 }
-/*
-void reset(void){
-	//toggle !RST
-	PIOD -> PIO_CODR = PIO_PD1;	
-	PIOD -> PIO_SODR = PIO_PD1;
-	//set !OE to high
-	PIOD -> PIO_SODR = PIO_PD0;
-}*/
 
-void move_motor(int joystick_position){
-	if((joystick_position) < LEFT_CUTOFF){
+int calibrate_motor(int16_t position_from_motor){
+	int new_position;
+	new_position = abs(((position_from_motor/40)*0.91)-200);
+	//printf("upper layer motor data: %d\n\r", new_position);
+	return new_position;
+}
+
+void move_motor(int joystick_position, int center){
+	printf("joy stick: %d\n\r", joystick_position);
+	//printf("center: %d\n\rpos: %d\n\r", center);
+
+	int16_t motor_data = receive_data();
+	int calibrated_motor_data = calibrate_motor(motor_data);
+	int16_t pid_output = pid_Controller(joystick_position, calibrated_motor_data);
+	printf("Calib Motor Data : %d\n\r", calibrated_motor_data);
+	printf("PID : %d\n\r", pid_output);
+
+	//REG_DACC_CDR = (pid_output);
+
+	if(joystick_position <= calibrated_motor_data){
+		printf("left: %d\n\r", pid_output);
 		PIOD -> PIO_CODR = PIO_PD10;
-		REG_DACC_CDR = 0xFFF - (joystick_position << 5);
+		REG_DACC_CDR = (0xfff - (pid_output << 5) )  ;
+		
 	}
-	else if ((joystick_position) > RIGHT_CUTOFF){
+	else if ((joystick_position) > calibrated_motor_data){
+		printf("right: %d\n\r", pid_output);
 		PIOD -> PIO_SODR = PIO_PD10;
-		REG_DACC_CDR = (joystick_position << 5) - 0xFFF;
+		REG_DACC_CDR = ((pid_output << 5) - 0xfff) ;
 	}
+	//else{
+		//REG_DACC_CDR = pid_output;
+	//}
 }

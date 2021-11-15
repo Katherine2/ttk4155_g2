@@ -112,7 +112,13 @@ void select_item(int row){
 	else if (row == 2){
 		//change brightness
 		OLED_pos(0,15);
-		OLED_print_string("The sun");
+		OLED_print_string("Brightness Level");
+		OLED_pos(2,15);
+		OLED_print_string("LOW");
+		OLED_pos(4,15);
+		OLED_print_string("MEDIUM");
+		OLED_pos(6,15);
+		OLED_print_string("HIGH");
 	}
 	else if (row == 4){
 		//Instructions
@@ -155,6 +161,10 @@ void select_item(int row){
 	}
 	
 	navigate_menu();
+}
+
+void select_brightness(int row){
+
 }
 
 void start_game(void){

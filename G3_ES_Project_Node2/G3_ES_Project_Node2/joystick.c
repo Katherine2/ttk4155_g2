@@ -27,7 +27,7 @@ CAN_MESSAGE get_positions(void){
 		int new_data_H = normalize_position(msg.data[0], centerH);
 		//printf("h data: %d\n\r", msg.data[0]);
 		//printf("center H: %d, new data H: %d\n\r", centerH, new_data_H);
-		//move_motor(new_data_H);
+		move_motor(new_data_H, centerH);
 		
 		//joystick vertical position
 		int new_data_V = normalize_position(msg.data[1], centerV);

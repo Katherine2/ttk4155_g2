@@ -82,8 +82,9 @@ void set_duty_cycle(int dty){
 	//calculates what value to set the REG_PWM_CDTY6 register to and then sets it to that value
 	//the range of the CDTY6 must be between 18000 (2 ms duty cycle) and 19000 (1 ms duty cycle)
 	//printf("cycle: %d\n\r", dutyCycle);
-	//int dty = 20000 - 1000*dutyCycle;
-	//printf("duty cycle: %d\n\r", dty);
+	//float dutyCycle = 1.5;
+	//int duty = 20000 - 1000*dutyCycle;
+	//printf("duty cycle: %d\n\r", duty);
 	if((MAX_DUTY_CYCLE <= dty) && (dty <= MIN_DUTY_CYCLE)){
 		REG_PWM_CDTY6 = dty;
 	}

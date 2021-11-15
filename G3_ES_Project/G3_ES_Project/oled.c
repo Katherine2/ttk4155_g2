@@ -25,7 +25,7 @@ void OLED_init(){
 	OLED_write_command(0xd5);        //display  divide ratio/osc. freq. mode
 	OLED_write_command(0x80);
 	OLED_write_command(0x81);        //contrast control
-	OLED_write_command(0x50);
+	OLED_write_command(0x30);
 	OLED_write_command(0xd9);        //set pre-charge period
 	OLED_write_command(0x21);
 	OLED_write_command(0x20);        //Set Memory Addressing Mode
@@ -38,7 +38,8 @@ void OLED_init(){
 	OLED_write_command(0xa6);        //set normal display
 	OLED_write_command(0xaf);        // display on
 	
-	
+	//OLED_write_command(0x81);
+	//OLED_write_data(0x50);
 	//turn everything on
 	for (int j = 0; j<8; j++){
 		OLED_write_command(0xb0 + j);
@@ -48,6 +49,8 @@ void OLED_init(){
 	}
 	_delay_ms(500);
 	OLED_clear();
+
+
 }
 
 void OLED_clear(){
