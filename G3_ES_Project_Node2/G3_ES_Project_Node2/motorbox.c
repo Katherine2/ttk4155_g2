@@ -16,8 +16,9 @@
 
 void dac_init(void){
 	PMC->PMC_PCER1 |= PMC_PCER1_PID38; //enable clock for DACC
-	REG_DACC_MR = DACC_MR_REFRESH(10) | DACC_MR_USER_SEL_CHANNEL1;
-	REG_DACC_CHER = DACC_CHER_CH1;
+	//REG_DACC_MR = DACC_MR_REFRESH(10) | DACC_MR_USER_SEL_CHANNEL1;
+	REG_DACC_MR = DACC_MR_USER_SEL_CHANNEL1;
+	REG_DACC_CHER |= DACC_CHER_CH1;
 	//REG_DACC_CDR //USE THIS TO SEND JOYSTICK POS
 }
 
@@ -86,16 +87,29 @@ void move_motor(int joystick_position, int center){
 
 	//REG_DACC_CDR = (pid_output);
 
+	//DACC->DACC_CDR = DACC_CDR_DATA(pid_output*85);
+	//printf("DACC CDR DATA: %d \n\r", DACC_CDR_DATA(pid_output*85));
+	
+	DACC->DACC_CDR = (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*100);
+	//printf("DACC CDR DATA: %d \n\r", DACC_CDR_DATA(pid_output*100));
+	printf("Output to register: %d \n\r", (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*100));
+	
+	
 	if(joystick_position <= calibrated_motor_data){
 		printf("left: %d\n\r", pid_output);
 		PIOD -> PIO_CODR = PIO_PD10;
-		REG_DACC_CDR = (0xfff - (pid_output << 5) )  ;
-		
+		//REG_DACC_CDR = (0xFFF -(pid_output) )  ;
+		//DACC->DACC_CDR = (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*100);
+		//printf("DACC CDR DATA: %d \n\r", DACC_CDR_DATA(pid_output*100));
+		//printf("Output to register: %d \n\r", (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*100));
 	}
 	else if ((joystick_position) > calibrated_motor_data){
 		printf("right: %d\n\r", pid_output);
 		PIOD -> PIO_SODR = PIO_PD10;
-		REG_DACC_CDR = ((pid_output << 5) - 0xfff) ;
+		//REG_DACC_CDR = (0xFFF -(pid_output) ) ;
+		//DACC->DACC_CDR = (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*100);
+		//printf("DACC CDR DATA: %d \n\r", DACC_CDR_DATA(pid_output*100));
+		//printf("Output to register: %d \n\r", (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*100));
 	}
 	//else{
 		//REG_DACC_CDR = pid_output;

@@ -66,6 +66,9 @@ int16_t pid_Controller(int16_t setPoint, int16_t processValue/*, struct PID_DATA
   error = processValue - setPoint;
 }
 
+if(error<10){
+	error=0;
+}
 
   // Calculate Pterm and limit error overflow
   if (error > pid.maxError){
@@ -106,7 +109,11 @@ if(ret > MAX_INT){
   else if(ret < -MAX_INT){
     ret = -MAX_INT;
   }
-
+ /*
+ if(ret<10){
+	 ret=0;
+ }
+*/
 //printf("ret:%d\n\r",ret);
   return((int16_t)ret);
 }
