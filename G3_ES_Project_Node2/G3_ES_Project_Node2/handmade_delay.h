@@ -9,8 +9,9 @@
 #ifndef HANDMADE_DELAY_H_
 #define HANDMADE_DELAY_H_
 
-void delay_us(uint16_t us);
-
+void delay_us(int us);
+void delay_ticks(int ticks);
+void delay_ms(int ms);
 
 
 #endif /* HANDMADE_DELAY_H_ */

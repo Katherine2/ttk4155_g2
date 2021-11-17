@@ -51,7 +51,7 @@ void motorbox_init(void){
 	PIOD -> PIO_CODR = PIO_PD0;		//set !OE to low
 	PIOD -> PIO_SODR = PIO_PD9;		//set EN to high
 	PIOD -> PIO_CODR = PIO_PD1;		//set !RES to low
-	delay_us(1000000);	
+	delay_us(30);	
 	PIOD -> PIO_SODR = PIO_PD1;		//set !RES to high
 }
 
@@ -59,10 +59,10 @@ int16_t receive_data(void){
 	int16_t data;
 	PIOD -> PIO_CODR = PIO_PD0;		//set !OE to low
 	PIOD -> PIO_CODR = PIO_PD2;		//set SEL to low
-	delay_us(1000000);					//wait 20 microseconds
+	delay_us(20);					//wait 20 microseconds
 	data |= ((PIOC->PIO_PDSR >> 1) & 0xFF) << 8 ;	//read MSB
 	PIOD -> PIO_SODR = PIO_PD2;		//set SEL to high
-	delay_us(1000000);					//wait 20 microseconds
+	delay_us(20);					//wait 20 microseconds
 	data |= (PIOC->PIO_PDSR >> 1) & 0xFF ;	//read LSB
 	PIOD -> PIO_SODR = PIO_PD0;		//set !OE to high
 	return data; //lsb | (msb << 8);
@@ -90,12 +90,13 @@ void move_motor(int joystick_position, int center){
 	//DACC->DACC_CDR = DACC_CDR_DATA(pid_output*85);
 	//printf("DACC CDR DATA: %d \n\r", DACC_CDR_DATA(pid_output*85));
 	
-	DACC->DACC_CDR = (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*100);
+	DACC->DACC_CDR = (1 & 0b11) << 12 | DACC_CDR_DATA(abs(pid_output)*15);
 	//printf("DACC CDR DATA: %d \n\r", DACC_CDR_DATA(pid_output*100));
-	printf("Output to register: %d \n\r", (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*100));
+	printf("Output to register: %d \n\r", (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*10));
 	
 	
-	if(joystick_position <= calibrated_motor_data){
+	//if(joystick_position <= calibrated_motor_data){
+	if(pid_output > 0){
 		printf("left: %d\n\r", pid_output);
 		PIOD -> PIO_CODR = PIO_PD10;
 		//REG_DACC_CDR = (0xFFF -(pid_output) )  ;
@@ -103,7 +104,8 @@ void move_motor(int joystick_position, int center){
 		//printf("DACC CDR DATA: %d \n\r", DACC_CDR_DATA(pid_output*100));
 		//printf("Output to register: %d \n\r", (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*100));
 	}
-	else if ((joystick_position) > calibrated_motor_data){
+	else if(pid_output<0){
+	//else if ((joystick_position) > calibrated_motor_data){
 		printf("right: %d\n\r", pid_output);
 		PIOD -> PIO_SODR = PIO_PD10;
 		//REG_DACC_CDR = (0xFFF -(pid_output) ) ;
