@@ -21,7 +21,6 @@ typedef struct can_message_t
 	char data[8];
 }CAN_MESSAGE;
 
-//void CAN0_Handler( void );
 int new_message_received(void);
 CAN_MESSAGE get_message(void);
 

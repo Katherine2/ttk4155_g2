@@ -12,5 +12,4 @@
 #include <util/delay.h>
 
 void clock_timer();
-void adc_init();
 uint8_t adc_read(uint8_t channel);

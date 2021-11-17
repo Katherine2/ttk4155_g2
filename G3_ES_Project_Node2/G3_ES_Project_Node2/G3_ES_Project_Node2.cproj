@@ -165,12 +165,6 @@
     <Compile Include="can_controller.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="can_interrupt.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="can_interrupt.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="game.c">
       <SubType>compile</SubType>
     </Compile>
@@ -232,9 +226,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="servo.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="stdint.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uart.c">

@@ -24,15 +24,6 @@ void mcp2515_init(void){
 	if((value & MODE_MASK) != MODE_CONFIG){
 		printf("MCP2515 is NOT in configuration mode after reset!\n");
 	}
-	//bit timing: BRP = 3 & 16TQ => SyncSeg = 1, PropSeg = 2, PS1 = 7, PS2 = 6, SJW = 1
-	/*
-	SPI_MasterTransmit(MCP_CNF1);
-	SPI_MasterTransmit(0x03);
-	SPI_MasterTransmit(MCP_CNF2);
-	SPI_MasterTransmit(0b10111010);
-	SPI_MasterTransmit(MCP_CNF3);
-	SPI_MasterTransmit(0b00000110);
-	*/
 }
 
 uint8_t mcp2515_read(uint8_t address){
@@ -103,20 +94,3 @@ void mcp2515_bit_modify(uint8_t address, uint8_t data_mask, uint8_t data){
 	SPI_MasterTransmit(data);
 	PORTB |= (1<<PB4);
 }
-
-/*
-char mcp2515_read_array(uint8_t address, uint8_t length){
-	char result[8];
-	for (int i=0; i<length; i++){
-		result[i] = mcp2515_read(address + i);
-		printf(mcp2515_read(address + i));
-	}
-	return result;
-}
-*/
-// void mcp2515_write_array(uint8_t address, uint8_t length, char data){
-// 	for (int i=0; i<length; i++){
-// 		mcp2515_write(address + i, data[i]);
-// 		/*printf(mcp2515_read(address + i));*/
-// 	}
-//}

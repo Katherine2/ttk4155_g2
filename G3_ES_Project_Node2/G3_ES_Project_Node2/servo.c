@@ -26,32 +26,15 @@ void pwm_init(void){
 	PIOC -> PIO_PDR |= PIO_PDR_P18;		//enable peripheral control of the pin
 	PIOC -> PIO_ABSR |= PIO_ABSR_P18;	//set it to peripheral B mode
 	//need to clear WPEN bit in PMC Write Protect Register (we are assuming it defaults to 0)
-	//PIOC -> PMC_PCER0 = PIO_PC18;
 	PIOC->PIO_WPMR = PASSWD_PIO_PWM;	//disable write protection
 	PMC->PMC_PCER1 |= (1 << 4);		//enable PWM clock
 
-	//REG_PMC_PCER0 = 0x00002000;
 	REG_PWM_CMR6 = 0xC;
 	PWM->PWM_CLK = 0x00540000;
-	REG_PWM_CPRD6 = 20000;//0x00004E20;
-	//DUTY CYCLE
-	//int dty = 20000 - 1000*3;
-	//REG_PWM_CDTY6 = dty;
-	//REG_PWM_CDTY6 = 10000;
-	//REG_PWM_CDTY6 = 10000;//0x00002710; //need to vary this with joystick
-	//REG_PWM_ENA = 0x00000040;
+	REG_PWM_CPRD6 = 20000;
 
 	PWM->PWM_ENA |= PWM_ENA_CHID6; // enable PWM channel 6
 }
-
-/*
-void move_servo(int joystick_position){
-	//CAN_MESSAGE position;
-	//position = get_positions();
-	//printf("position: %d \n\r", joystick_position);
-	move_to(joystick_position);
-}
-*/
 
 void move_servo(int pos){
 	//associate position to pwm duty cycle
@@ -81,10 +64,6 @@ void move_servo(int pos){
 void set_duty_cycle(int dty){
 	//calculates what value to set the REG_PWM_CDTY6 register to and then sets it to that value
 	//the range of the CDTY6 must be between 18000 (2 ms duty cycle) and 19000 (1 ms duty cycle)
-	//printf("cycle: %d\n\r", dutyCycle);
-	//float dutyCycle = 1.5;
-	//int duty = 20000 - 1000*dutyCycle;
-	//printf("duty cycle: %d\n\r", duty);
 	if((MAX_DUTY_CYCLE <= dty) && (dty <= MIN_DUTY_CYCLE)){
 		REG_PWM_CDTY6 = dty;
 	}

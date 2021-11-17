@@ -39,20 +39,8 @@ int main(void){
 	can_init();
 	OLED_init();
 	
-	//int centerH = calibrate_joystick_center(HORIZONTAL, 10);
-	//int centerV = calibrate_joystick_center(VERTICAL, 10);
-	
 	while (1){		
 		menu_init();
-		/*
-		//printf("center h: %d, center v: %d\n\r", centerH, centerV);
-		int valueH = adc_read(HORIZONTAL);
-		//printf("adc horizontal value: %d\n\r", valueH);
-		int valueV = adc_read(VERTICAL);
-		int button_status = get_button_status();
-		//printf("main function hdata: %d, vdata: %d, bstat: %d, hcenter:%d, vcenter:%d\n\r", valueH, valueV, button_status, centerH, centerV);
-		send_joystick_status(valueH, valueV, button_status, centerH, centerV);
-		_delay_ms(50);*/
 	}
 }
 

@@ -19,7 +19,6 @@ CAN_MESSAGE message;
 
 void CAN0_Handler( void )
 {
-	//if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
 	char can_sr = CAN0->CAN_SR;
 	
 	//RX interrupt
@@ -50,9 +49,7 @@ void CAN0_Handler( void )
 	}
 	
 	if(can_sr & CAN_SR_MB0)
-	{
-		//if(DEBUG_INTERRUPT) printf("CAN0 MB0 ready to send \n\r");
-		
+	{		
 		//Disable interrupt
 		CAN0->CAN_IDR = CAN_IER_MB0;
 
@@ -70,7 +67,6 @@ void CAN0_Handler( void )
 	}
 	
 	NVIC_ClearPendingIRQ(ID_CAN0);
-	//sei();
 }
 
 /**
@@ -130,8 +126,7 @@ uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb)
 	PMC->PMC_PCER1 |= 1 << (ID_CAN0 - 32);
 	
 	//Set baudrate, Phase1, phase2 and propagation delay for can bus. Must match on all nodes!
-	//bit timing: BRP = 3 & 16TQ => SyncSeg = 1, PropSeg = 2, PS1 = 7, PS2 = 6, SJW = 1
-	//can_br = 0b00000000000000110001001001110110;
+	//TO CHANGE bit timing: BRP = 3 & 16TQ => SyncSeg = 1, PropSeg = 2, PS1 = 7, PS2 = 6, SJW = 1
 	CAN0->CAN_BR = can_br; 
 	
 	/****** Start of mailbox configuration ******/

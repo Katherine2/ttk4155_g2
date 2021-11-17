@@ -11,7 +11,6 @@
 #define SERVO_H_
 
 void pwm_init(void);
-//void move_servo(int joystick_position);
 void move_servo(int pos);
 void set_duty_cycle(int dty);
 

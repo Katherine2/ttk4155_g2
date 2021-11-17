@@ -20,12 +20,8 @@ void start_game(){
 	while(1) {
 		if(playing && !game_end){
 			adc = adc_read();
-			//printf("ir value\n\r");
 			goal = is_goal(adc, goal);
 			msg = get_positions();
-			//int16_t data = receive_data();
-			//int pos = calibrate_motor(data);			
-			//printf("data: %d\n\rpos: %d\n\r", data, pos);
 			delay_us(100000);
 		}
 		else{
@@ -33,18 +29,12 @@ void start_game(){
 				msg = get_message();
 				if(!msg.data[2]){
 					playing = 1;
-					//resume_game();
 				}
 			}
 		}
 	}
 }
 
-/*
-void resume_game(){
-	playing = 1;
-}
-*/
 void pause_game(int score){
 	playing = 0;
 	if(score >= GAME_OVER){

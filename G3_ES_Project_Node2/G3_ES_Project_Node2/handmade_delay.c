@@ -5,28 +5,6 @@
  *  Author: kathersi
  */ 
 
-/*
-#include <stdint.h>
-#include "sam.h"
-#define US_TO_TICKS_CONVERTER (84 & SysTick_LOAD_RELOAD_Msk)		//https://www.at91.com/viewtopic.php?t=22349
-
-static volatile uint16_t ticks;
-
-void delay_us(uint16_t us) {
-	ticks = us;
-	SysTick_Config(1 * US_TO_TICKS_CONVERTER);
-	
-	while (ticks > 0);
-}
-
-void SysTick_Handler() {
-	ticks--;
-	if (ticks == 0) {
-		SysTick->CTRL = 0;
-	}
-}
-*/
-
 #define F_CPU 84000000UL
 #include "sam.h"
 

@@ -38,8 +38,6 @@ void OLED_init(){
 	OLED_write_command(0xa6);        //set normal display
 	OLED_write_command(0xaf);        // display on
 	
-	//OLED_write_command(0x81);
-	//OLED_write_data(0x50);
 	//turn everything on
 	for (int j = 0; j<8; j++){
 		OLED_write_command(0xb0 + j);
@@ -49,8 +47,6 @@ void OLED_init(){
 	}
 	_delay_ms(500);
 	OLED_clear();
-
-
 }
 
 void OLED_clear(){
@@ -85,7 +81,6 @@ void OLED_print(char c){
 void OLED_pos(uint8_t row, uint8_t column){
 	OLED_goto_line(row);
 	OLED_goto_column(column);
-	//for now, when we want to write something, we will be writing from the leftmost positions so as to not deal with the columns at the beginning	
 }
 
 void OLED_goto_line(uint8_t line){
@@ -93,8 +88,6 @@ void OLED_goto_line(uint8_t line){
 }
 
 void OLED_goto_column(uint8_t column){
-	//OLED_write_command(0x00);
-	//OLED_write_command(0x10);
 	OLED_write_command(column);
 	OLED_write_command(0x10);
 }

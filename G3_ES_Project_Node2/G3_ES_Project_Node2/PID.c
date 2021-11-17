@@ -6,7 +6,6 @@
  */ 
 
 #include "pid.h"
-//#include "stdint.h"
 
 
 #define K_P     1.5
@@ -18,23 +17,13 @@ struct PID_DATA pid;
 
 #define TIME_INTERVAL   157
 
-/*! \brief Initialisation of PID controller parameters.
- *
- *  Initialise the variables used by the PID algorithm.
- *
- *  \param p_factor  Proportional term.
- *  \param i_factor  Integral term.
- *  \param d_factor  Derivate term.
- *  \param pid  Struct with PID status.
- */
-void pid_Init(void/*struct PID_DATA *pid*/)
+
+void pid_Init(void)
 // Set up PID controller parameters
 {
-  // Start values for PID controller
 	pid.id = 1;
 	pid.sumError = 0;
 	pid.lastProcessValue = 0;
-	// Tuning constants for PID loop
 	pid.P_Factor = K_P;
 	pid.I_Factor = K_I;
 	pid.D_Factor = K_D;
@@ -44,32 +33,13 @@ void pid_Init(void/*struct PID_DATA *pid*/)
 }
 
 
-/*! \brief PID control algorithm.
- *
- *  Calculates output from setpoint, process value and PID status.
- *
- *  \param setPoint  Desired value.
- *  \param processValue  Measured value.
- *  \param pid  PID status struct.
- */
-int16_t pid_Controller(int16_t setPoint, int16_t processValue/*, struct PID_DATA *pid*/)
+int16_t pid_Controller(int16_t setPoint, int16_t processValue)
 {
-	//printf("id: %d\n\r", pid.id);
 	int16_t error, p_term, d_term;
 	int32_t i_term, ret, temp;
-  
-	//if(processValue <= setPoint){
-		//error = setPoint - processValue;
-	//}
-
-	//if(processValue > setPoint){
-		error = processValue - setPoint;
-	//}
-
-/*	if(error<10){
-		error=0;
-	}
-*/
+	
+	error = processValue - setPoint;
+	
 	// Calculate Pterm and limit error overflow
 	if (error > pid.maxError){
 		p_term = MAX_INT;
@@ -100,7 +70,6 @@ int16_t pid_Controller(int16_t setPoint, int16_t processValue/*, struct PID_DATA
 	d_term = pid.D_Factor * (pid.lastProcessValue - processValue);
 
 	pid.lastProcessValue = processValue;
-	//printf("p:%d, i:%d, d:%d\n\r", p_term, i_term, d_term);
 	ret = (p_term + i_term + d_term); // SCALING_FACTOR;
   
 	if(ret > MAX_INT){
@@ -109,6 +78,5 @@ int16_t pid_Controller(int16_t setPoint, int16_t processValue/*, struct PID_DATA
 	else if(ret < -MAX_INT){
 		ret = -MAX_INT;
 	}
-	//printf("ret:%d\n\r",ret);
 	return((int16_t)ret);
 }

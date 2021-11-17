@@ -23,7 +23,7 @@
 static int centerX, centerY;
 int currentRow;
 int playing = 0;
-//static int prevPosX = 0;	//neutral
+//static int brightness_subMenu = 0;
 
 void menu_init(void){
 	centerX = calibrate_joystick_center(0, 10);
@@ -48,24 +48,25 @@ void display_main_menu(void){
 }
 
 void navigate_menu(void){
-	//clock_timer();
 	if(!playing){
 	printf("current row before while: %d\r\n", currentRow);
 		while(1){
 			uint8_t x = adc_read(0);
 			uint8_t y = adc_read(1);
 			printf("adc horizontal: %d, adc vertical: %d\n\r", x, y);
-			//printf("x position: %d\r\n", normalize_output_joystick(x, centerX));
 			if(normalize_output_joystick(x, centerX) < -90){
-				//back
-				//printf("left\r\n");
 				display_main_menu();
 				_delay_ms(1000);
 			}
 		
 			if(normalize_output_joystick(x, centerX) > 90){
 				printf("current row %d\r\n", currentRow);
-				select_item(currentRow);
+				//if(brightness_subMenu){
+				//	select_brightness(currentRow);
+				//}
+				//else {
+					select_item(currentRow);
+				//}
 				_delay_ms(1000);
 			}
 		
@@ -92,6 +93,10 @@ void navigate_menu(void){
 				OLED_print('>');
 				_delay_ms(1000);
 			}
+			
+			if(!get_button_status()){
+				select_brightness(currentRow);
+			}
 		}
 	}
 }
@@ -107,12 +112,11 @@ void select_item(int row){
 		OLED_pos(2,15);
 		OLED_print_string("PING PONG TIME");
 		start_game();
-		//break;
 	}
 	else if (row == 2){
 		//change brightness
 		OLED_pos(0,15);
-		OLED_print_string("Brightness Level");
+		OLED_print_string("Brightness");
 		OLED_pos(2,15);
 		OLED_print_string("LOW");
 		OLED_pos(4,15);
@@ -141,7 +145,6 @@ void select_item(int row){
 	}
 	else if (row == 6){
 		//calibrate joystick
-		//sprintf
 		char buffer[10];
 		OLED_pos(0,15);
 		OLED_print_string("Center values");
@@ -164,19 +167,26 @@ void select_item(int row){
 }
 
 void select_brightness(int row){
-
+	if (row == 2){
+		OLED_write_command(0x81);
+		OLED_write_command(0x10);
+	}
+	else if (row == 4){
+		OLED_write_command(0x81);
+		OLED_write_command(0x50);
+	}
+	else if (row == 6){
+		OLED_write_command(0x81);
+		OLED_write_command(0xa0);
+	}
 }
 
 void start_game(void){
-	//int centerH = calibrate_joystick_center(HORIZONTAL, 10);
-	//int centerV = calibrate_joystick_center(VERTICAL, 10);
 	while(1){
-		//printf("center h: %d, center v: %d\n\r", centerH, centerV);
 		int valueH = adc_read(HORIZONTAL);
 		printf("adc horizontal value: %d\n\r", valueH);
 		int valueV = adc_read(VERTICAL);
 		int button_status = get_button_status();
-		//printf("main function hdata: %d, vdata: %d, bstat: %d, hcenter:%d, vcenter:%d\n\r", valueH, valueV, button_status, centerX, centerY);
 		send_joystick_status(valueH, valueV, button_status, centerX, centerY);
 		_delay_ms(50);
 	}

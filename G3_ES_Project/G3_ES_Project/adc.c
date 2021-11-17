@@ -12,23 +12,15 @@
 volatile char *adc_reg = (char *) ADC_BASE;
 
 //set the clock
-void clock_timer() //previously called PWM_init() but I feel like this makes more sense as a function name
+void clock_timer() 
 {
-	/*set fast PWM mode with non-inverted output*/
-	DDRD |= (1<<PD4);  /*set OC0 pin as output*/
+	//set fast PWM mode with non-inverted output
+	DDRD |= (1<<PD4);  //set OC0 pin as output
 	TCCR3A |= (1<<WGM32) | (1<<COM3A0);
 	TCCR3B |= (1<<CS30) | (1<<WGM32);
 	OCR3AH = 0b00000001;
 }
 
-//should be deleted?
-void adc_init(){
-	//setting the ADC CS to low to select it (active low) from the NAND gates
-	DDRC |= (1 << PC2);
-	PORTC = 0x04;
-}
-
-//volatile
 uint8_t adc_read(uint8_t channel){	
 	uint8_t adc_channel;
 	

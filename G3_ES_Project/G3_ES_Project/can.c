@@ -23,11 +23,8 @@ void can_init(void){
 	
 	//Check that the registers have the right values
 	uint8_t cnf1 = mcp2515_read(MCP_CNF1);
-	//printf("cnf1:%d\r\n", cnf1);		//should be 67
 	uint8_t cnf2 = mcp2515_read(MCP_CNF2);
-	//printf("cnf2:%d\r\n", cnf2);		//should be 181
 	uint8_t cnf3 = mcp2515_read(MCP_CNF3);
-	//printf("cnf3:%d\r\n\n", cnf3);		//should be 1
 	
 	
 	mcp2515_write(MCP_CANCTRL, MODE_NORMAL);
@@ -85,7 +82,6 @@ void can_transmit(can_msg msg){
 	mcp2515_write(MCP_TXB0DLC, msg.length);
 	for(uint8_t i = 0; i < (msg.length); i++){
 		mcp2515_write(MCP_TXB0D0 + i, msg.data[i]);
-		//printf("data: %d\r\n", msg.data[i]);
 	}
 	mcp2515_request_to_send(0);
 	

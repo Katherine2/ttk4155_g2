@@ -187,6 +187,5 @@ void mcp2515_reset(void);
 void mcp2515_request_to_send(uint8_t buffer);
 uint8_t mcp2515_read_status(void);
 void mcp2515_bit_modify(uint8_t address, uint8_t data_mask, uint8_t data);
-char mcp2515_read_array(uint8_t address, uint8_t length);
 
 #endif

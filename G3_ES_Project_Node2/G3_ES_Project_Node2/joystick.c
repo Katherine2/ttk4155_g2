@@ -17,7 +17,7 @@ int centerV, centerH;
 CAN_MESSAGE get_positions(void){
 	if(new_message_received()){
 		msg = get_message();
-		//print_message(msg);
+		print_message(msg);
 		
 		//get centers
 		centerH = (int)msg.data[3];
@@ -25,29 +25,22 @@ CAN_MESSAGE get_positions(void){
 		
 		//joystick horizontal position
 		int new_data_H = normalize_position(msg.data[0], centerH);
-		//printf("h data: %d\n\r", msg.data[0]);
-		//printf("center H: %d, new data H: %d\n\r", centerH, new_data_H);
 		move_motor(new_data_H, centerH);
 		
 		//joystick vertical position
 		int new_data_V = normalize_position(msg.data[1], centerV);
-		//printf("v data: %d\n\r", msg.data[1]);
-		//printf("center V: %d, new data V: %d\n\r", centerV, new_data_V);
 		move_servo(new_data_V);
 		//joystick button
 		button_pressed(msg.data[2]);
-		//printf("button: %d\n\r", msg.data[2]);
 	}
 	return msg;
 }
 
 void button_pressed(char d){
-	//printf("button\n\r");
 	PIOC -> PIO_PER = PIO_PC16;		//enables input/output function
 	PIOC -> PIO_OER = PIO_PC16;		//sets pin PC16 (pin 47) as output
 	PIOC -> PIO_PUDR = PIO_PC16;	//disables pull-ups
 	if((int)d == 0){
-		//printf("button pressed\n\r");
 		PIOC -> PIO_SODR = PIO_PC16;	//sets output data register
 	}
 	else{
