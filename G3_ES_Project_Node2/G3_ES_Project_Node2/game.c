@@ -9,8 +9,9 @@
 #include "ir.h"
 #include "joystick.h"
 #include "can_controller.h"
+#include "sam.h"
 
-#define GAME_OVER 5
+#define GAME_OVER 50
 
 int playing = 1, game_end= 0;
 CAN_MESSAGE msg;
@@ -29,6 +30,10 @@ void start_game(){
 				msg = get_message();
 				if(!msg.data[2]){
 					playing = 1;
+					PIOA -> PIO_PER = PIO_PA19;		//enables input/output function
+					PIOA -> PIO_OER = PIO_PA19;		//sets pin PA19 (pin 42) as output
+					PIOA -> PIO_PUDR = PIO_PA19;	//disables pull-ups
+					PIOA -> PIO_CODR = PIO_PA19;	//clear output data register
 				}
 			}
 		}

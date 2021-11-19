@@ -5,6 +5,9 @@
  *  Author: kathersi
  */ 
 
+
+#define F_CPU 4915200
+
 #include "joystick.h"
 #include "oled.h"
 
@@ -61,12 +64,7 @@ void navigate_menu(void){
 		
 			if(normalize_output_joystick(x, centerX) > 90){
 				printf("current row %d\r\n", currentRow);
-				//if(brightness_subMenu){
-				//	select_brightness(currentRow);
-				//}
-				//else {
-					select_item(currentRow);
-				//}
+				select_item(currentRow);
 				_delay_ms(1000);
 			}
 		
@@ -93,10 +91,6 @@ void navigate_menu(void){
 				OLED_print('>');
 				_delay_ms(1000);
 			}
-			
-			if(!get_button_status()){
-				select_brightness(currentRow);
-			}
 		}
 	}
 }
@@ -107,9 +101,10 @@ void select_item(int row){
 	if(row == 0){
 		playing = 1;
 		//start game
-		OLED_pos(0,15);
-		OLED_print_string("READY SET GO!");
-		OLED_pos(2,15);
+		start_animation("READY!");
+		start_animation("SET...");
+		start_animation("GO!!!!");
+		OLED_pos(2,0);
 		OLED_print_string("PING PONG TIME");
 		start_game();
 	}
@@ -123,6 +118,37 @@ void select_item(int row){
 		OLED_print_string("MEDIUM");
 		OLED_pos(6,15);
 		OLED_print_string("HIGH");
+		uint8_t x = adc_read(0);
+		uint8_t y = adc_read(1);
+		while(!(normalize_output_joystick(x, centerX) < -90)){
+			x = adc_read(0);
+			y = adc_read(1);
+			if(normalize_output_joystick(y, centerY) > 90){
+				OLED_clear_position(currentRow, 0);
+				currentRow = currentRow - 2;
+				if(currentRow < 0){
+					currentRow = 6;
+				}
+				//printf("current row after moving up: %d\r\n", currentRow);
+				OLED_pos(currentRow, 0);
+				OLED_print('>');
+				_delay_ms(1000);
+			}
+			if(normalize_output_joystick(y, centerY) < -90){
+				OLED_clear_position(currentRow, 0);
+				currentRow = currentRow + 2;
+				if(currentRow > 6){
+					currentRow = 0;
+				}
+				//printf("current row after moving down: %d\r\n", currentRow);
+				OLED_pos(currentRow, 0);
+				OLED_print('>');
+				_delay_ms(1000);
+			}
+			if(!get_button_status()){
+				select_brightness(currentRow);
+			}
+		}
 	}
 	else if (row == 4){
 		//Instructions
@@ -162,7 +188,6 @@ void select_item(int row){
 		sprintf(buffer, "%d", centerY);
 		OLED_print_string(buffer);
 	}
-	
 	navigate_menu();
 }
 
@@ -181,13 +206,30 @@ void select_brightness(int row){
 	}
 }
 
+void start_animation(char *str){
+	OLED_write_command(0x2E);
+	OLED_write_command(0x29);	//set left scroll
+	OLED_write_command(0x00);	//dummy byte
+	OLED_write_command(0x00);	//start at page 0
+	OLED_write_command(0x07);	//time interval of 2 frames
+	OLED_write_command(0x07);	//end at page 7
+	OLED_write_command(0x01);	//dummy byte
+	OLED_pos(7, 0);
+	OLED_print_string(str);
+	OLED_write_command(0x2F);
+	_delay_ms(1000);
+	OLED_write_command(0x2E);
+	_delay_ms(300);	
+	OLED_clear();
+}
+
 void start_game(void){
 	while(1){
 		int valueH = adc_read(HORIZONTAL);
-		printf("adc horizontal value: %d\n\r", valueH);
+		//printf("adc horizontal value: %d\n\r", valueH);
 		int valueV = adc_read(VERTICAL);
 		int button_status = get_button_status();
 		send_joystick_status(valueH, valueV, button_status, centerX, centerY);
-		_delay_ms(50);
+		_delay_ms(100);
 	}
 }

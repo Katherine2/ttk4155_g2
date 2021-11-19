@@ -72,16 +72,12 @@ int calibrate_motor(int16_t position_from_motor){
 }
 
 void move_motor(int joystick_position, int center){
-	//printf("joy stick: %d\n\r", joystick_position);
 
 	int16_t motor_data = receive_data();
 	int calibrated_motor_data = calibrate_motor(motor_data);
 	int16_t pid_output = pid_Controller(joystick_position, calibrated_motor_data);
-	//printf("Calib Motor Data : %d\n\r", calibrated_motor_data);
-	//printf("PID : %d\n\r", pid_output);
 	
 	DACC->DACC_CDR = (1 & 0b11) << 12 | DACC_CDR_DATA(abs(pid_output)*15);
-	//printf("Output to register: %d \n\r", (1 & 0b11) << 12 | DACC_CDR_DATA(pid_output*10));
 	
 	if(pid_output > 0){
 		PIOD -> PIO_CODR = PIO_PD10;

@@ -45,6 +45,11 @@ void OLED_init(){
 			OLED_write_data(0b11111111);
 		}
 	}
+	for (int i = 0; i<256; i++){
+		OLED_write_command(0x81);
+		OLED_write_command(i);
+		_delay_ms(10);
+	}
 	_delay_ms(500);
 	OLED_clear();
 }
@@ -88,8 +93,8 @@ void OLED_goto_line(uint8_t line){
 }
 
 void OLED_goto_column(uint8_t column){
-	OLED_write_command(column);
-	OLED_write_command(0x10);
+	OLED_write_command(column & 0x0F);
+	OLED_write_command(0x10 | (column >> 4));
 }
 
 void OLED_print_string(char* str){
