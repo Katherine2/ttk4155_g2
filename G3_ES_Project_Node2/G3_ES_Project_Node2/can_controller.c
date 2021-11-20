@@ -27,7 +27,7 @@ void CAN0_Handler( void )
 		if(can_sr & CAN_SR_MB1)  //Mailbox 1 event
 		{
 			can_receive(&message, 1);
-			 newMessage = 1;
+			newMessage = 1;
 		}
 		else if(can_sr & CAN_SR_MB2) //Mailbox 2 event
 		{
@@ -251,11 +251,12 @@ uint8_t can_receive(CAN_MESSAGE* can_msg, uint8_t rx_mb_id)
 	}
 }
 
-// Move the can handler in this file and use these functions to get the message in main
+//Returns the "flag" we use to know if there is a new message saved to the struct
 int new_message_received(void){
 	return newMessage;
 }
 
+//return the message saved on the struct so that it can be used in different files
 CAN_MESSAGE get_message(void){
 	newMessage = 0;
 	return message;

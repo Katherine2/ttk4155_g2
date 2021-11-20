@@ -7,7 +7,6 @@
 
 #include "pid.h"
 
-
 #define K_P     1.5
 #define K_I     0.25
 #define K_D     0.1
@@ -16,7 +15,6 @@
 struct PID_DATA pid;
 
 #define TIME_INTERVAL   157
-
 
 void pid_Init(void)
 // Set up PID controller parameters
@@ -31,7 +29,6 @@ void pid_Init(void)
 	pid.maxError = MAX_INT / (pid.P_Factor + 1);
 	pid.maxSumError = MAX_I_TERM / (pid.I_Factor + 1);
 }
-
 
 int16_t pid_Controller(int16_t setPoint, int16_t processValue)
 {

@@ -12,25 +12,10 @@
 #define IR_THRESHOLD 300
 
 void adc_init(void){
-	PMC->PMC_PCER1 |= PMC_PCER1_PID37;//(1 << 6);		//enable ADC clock
-	/*
-	USEQ = 0 => normal mode 
-	TRANSFER = 01 => 1 (because we didn't know and p.1408 said that)
-	TRACKTIM = 0000 => 0 (because we didn't know and p.1408 said that)
-	ANACH = 0 => no analog change 
-	SETTLING = 00 => 3 periods of ADCClock 
-	STARTUP = 0000 => 0 periods of ADCClock 
-	PRESCAL = 10000000 => 128 gives adc clock of about 325kHz (picked it at random to fit in the 8 bits)
-	FREERUN = 1 => Free Run Mode (because TA said in lecture)
-	FWUP = 0 => Normal Mode
-	SLEEP = 0 => Normal Mode
-	LOWRES = 0 => 12-bit resolution (because it makes more sense)
-	TRGSEL = 000 => don't care about the value since TRGEN is 0
-	TRGEN = 0 => Hardware triggers are disabled 
-	*/
-	ADC->ADC_MR |= ADC_MR_FREERUN_ON;//0b00010000000000001000000010000000;
-	ADC->ADC_CHER |= ADC_CHER_CH0;//0x00000001;		//enables channel 0
-	ADC->ADC_CR |= ADC_CR_START;//0x00000002;		//starts analog-to-digital conversion
+	PMC->PMC_PCER1 |= PMC_PCER1_PID37;	//enable ADC clock
+	ADC->ADC_MR |= ADC_MR_FREERUN_ON;
+	ADC->ADC_CHER |= ADC_CHER_CH0;		//enables channel 0
+	ADC->ADC_CR |= ADC_CR_START;		//starts analog-to-digital conversion
 	//ADC->ADC_CDR; //the converted data is stored here for a specific channel
 	//ADC->ADC_LCDR; //the last converted data of all channels is stored here with the channel number until a new conversion is complete
 	//channel and pin numbre are inverted, that is pin A0 is channel 7 and channel 0 is pin A7
@@ -41,12 +26,12 @@ int adc_read(void){
 }
 
 int is_goal(int value, int score){
-	PIOA -> PIO_PER = PIO_PA19;		//enables input/output function
-	PIOA -> PIO_OER = PIO_PA19;		//sets pin PA19 (pin 42) as output
-	PIOA -> PIO_PUDR = PIO_PA19;	//disables pull-ups
+	PIOA -> PIO_PER = PIO_PA19;			//enables input/output function
+	PIOA -> PIO_OER = PIO_PA19;			//sets pin PA19 (pin 42) as output
+	PIOA -> PIO_PUDR = PIO_PA19;		//disables pull-ups
 	if(value < IR_THRESHOLD){
 		score++;
-		PIOA -> PIO_SODR = PIO_PA19;	//sets output data register
+		PIOA -> PIO_SODR = PIO_PA19;	//turn on LED
 		pause_game(score);
 	}
 	printf("score: %d\n\r", score);

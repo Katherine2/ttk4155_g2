@@ -15,7 +15,7 @@
 #define RIGHT_CUTOFF 150
 
 void dac_init(void){
-	PMC->PMC_PCER1 |= PMC_PCER1_PID38; //enable clock for DACC
+	PMC->PMC_PCER1 |= PMC_PCER1_PID38; 			//enable clock for DACC
 	REG_DACC_MR = DACC_MR_USER_SEL_CHANNEL1;
 	REG_DACC_CHER |= DACC_CHER_CH1;
 }
@@ -65,24 +65,25 @@ int16_t receive_data(void){
 	return data; 
 }
 
+//map the motor position from the returned postion of the encoder to a 0 to 200 mapping
 int calibrate_motor(int16_t position_from_motor){
 	int new_position;
 	new_position = abs(((position_from_motor/40)*0.91)-200);
 	return new_position;
 }
 
-void move_motor(int joystick_position, int center){
 
+void move_motor(int joystick_position, int center){
 	int16_t motor_data = receive_data();
 	int calibrated_motor_data = calibrate_motor(motor_data);
 	int16_t pid_output = pid_Controller(joystick_position, calibrated_motor_data);
 	
 	DACC->DACC_CDR = (1 & 0b11) << 12 | DACC_CDR_DATA(abs(pid_output)*15);
 	
-	if(pid_output > 0){
+	if(pid_output > 0){			//if the pid returns a positive number, go right
 		PIOD -> PIO_CODR = PIO_PD10;
 	}
-	else if(pid_output < 0){
+	else if(pid_output < 0){	//if the pid returns a negative number, go left
 		PIOD -> PIO_SODR = PIO_PD10;
 	}
 }

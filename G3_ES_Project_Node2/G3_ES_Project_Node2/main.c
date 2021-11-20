@@ -21,11 +21,10 @@
 CAN_MESSAGE message;
 
 int main(void) {
-    // Initialize the SAM system 
-    SystemInit();
-	WDT->WDT_MR = WDT_MR_WDDIS;		//disable the watchdog timer
+    SystemInit();						// Initialize the SAM system 
+	WDT->WDT_MR = WDT_MR_WDDIS;			//disable the watchdog timer
 	configure_uart();
-	can_init_def_tx_rx_mb(0x00290561);
+	can_init_def_tx_rx_mb(0x00290561);	//sets the CAN timing. It is the same as in Node 1
 	motorbox_init();
 	dac_init();
 	pwm_init();

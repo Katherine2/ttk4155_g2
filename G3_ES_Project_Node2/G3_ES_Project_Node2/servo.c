@@ -27,13 +27,13 @@ void pwm_init(void){
 	PIOC -> PIO_ABSR |= PIO_ABSR_P18;	//set it to peripheral B mode
 	//need to clear WPEN bit in PMC Write Protect Register (we are assuming it defaults to 0)
 	PIOC->PIO_WPMR = PASSWD_PIO_PWM;	//disable write protection
-	PMC->PMC_PCER1 |= (1 << 4);		//enable PWM clock
+	PMC->PMC_PCER1 |= (1 << 4);			//enable PWM clock
 
 	REG_PWM_CMR6 = 0xC;
 	PWM->PWM_CLK = 0x00540000;
 	REG_PWM_CPRD6 = 20000;
 
-	PWM->PWM_ENA |= PWM_ENA_CHID6; // enable PWM channel 6
+	PWM->PWM_ENA |= PWM_ENA_CHID6; 		// enable PWM channel 6
 }
 
 void move_servo(int pos){

@@ -14,6 +14,7 @@
 CAN_MESSAGE msg;
 int centerV, centerH;
 
+//gets the can message and calls the appropriate functions
 CAN_MESSAGE get_positions(void){
 	if(new_message_received()){
 		msg = get_message();
@@ -25,22 +26,22 @@ CAN_MESSAGE get_positions(void){
 		
 		//joystick horizontal position
 		int new_data_H = normalize_position(msg.data[0], centerH);
-		move_motor(new_data_H, centerH);
+		move_motor(new_data_H, centerH);	//move the motor according to the received position
 		
 		//joystick vertical position
 		int new_data_V = normalize_position(msg.data[1], centerV);
-		move_servo(new_data_V);
+		move_servo(new_data_V);				//move the servo according to the received position
 		//joystick button
-		button_pressed(msg.data[2]);
+		button_pressed(msg.data[2]);		//press the button according to the received button status
 	}
 	return msg;
 }
 
 void button_pressed(char d){
-	PIOC -> PIO_PER = PIO_PC16;		//enables input/output function
-	PIOC -> PIO_OER = PIO_PC16;		//sets pin PC16 (pin 47) as output
-	PIOC -> PIO_PUDR = PIO_PC16;	//disables pull-ups
-	if((int)d == 0){
+	PIOC -> PIO_PER = PIO_PC16;			//enables input/output function
+	PIOC -> PIO_OER = PIO_PC16;			//sets pin PC16 (pin 47) as output
+	PIOC -> PIO_PUDR = PIO_PC16;		//disables pull-ups
+	if((int)d == 0){					//button is active low
 		PIOC -> PIO_SODR = PIO_PC16;	//sets output data register
 	}
 	else{
@@ -48,6 +49,7 @@ void button_pressed(char d){
 	}
 }
 
+//the position of the joystick is normalized from the received 0 to 255 value to a 0 to 200 value
 int normalize_position(char d, int center){
 		int value = (int)d;
 		int position = 0;
@@ -60,6 +62,7 @@ int normalize_position(char d, int center){
 		return position;
 }
 
+//no longer necessary, we receive the calibrated center from Node 1 through the CAN message
 int calibrate_center(char d){
 	int value, center;
 	for (int i = 0; i < 10; i++){

@@ -8,8 +8,7 @@
 #define F_CPU 84000000UL
 #include "sam.h"
 
-
-// Function for performing delay by using SysTick 
+//using SysTick timer for the delay
 void delay_ticks(int ticks)
 {
 	SysTick->LOAD = ticks;
@@ -20,15 +19,7 @@ void delay_ticks(int ticks)
 
 }
 
-// Function for implementing us delay 
 void delay_us(int us)
 {
 	delay_ticks((us * (F_CPU / 8.4)) / 1000000);
 }
-
-
-/* Function for implementing ms delay 
-void delay_ms(int ms)
-{
-	delay_ticks((ms * (F_CPU / 8.4)) / 1000);
-}*/
