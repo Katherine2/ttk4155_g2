@@ -32,7 +32,7 @@
 int main(void){	
 	USART_Init(MYUBRR);
 	
-	fdevopen(USART_Transmit, USART_Receive);
+	fdevopen(USART_Transmit, USART_Receive);		//links the printf function
 	
 	clock_timer();
 	SRAM_init();

@@ -45,6 +45,8 @@ void OLED_init(){
 			OLED_write_data(0b11111111);
 		}
 	}
+
+	//increment brightness from lowest to highest
 	for (int i = 0; i<256; i++){
 		OLED_write_command(0x81);
 		OLED_write_command(i);
@@ -54,6 +56,7 @@ void OLED_init(){
 	OLED_clear();
 }
 
+//set all the pixels to off to clear the screen
 void OLED_clear(){
 	for (int j = 0; j<8; j++){
 		OLED_write_command(0xb0 + j);
@@ -63,19 +66,23 @@ void OLED_clear(){
 	}
 }
 
+//clear a single position
 void OLED_clear_position(uint8_t row, uint8_t column){
 	OLED_pos(row, column);
 	OLED_print(' ');
 }
 
+//sends a command to the oled
 void OLED_write_command(char c){
 	oled_command_reg[0] = c;
 }
 
+//writes data
 void OLED_write_data(char c){
 	oled_data_reg[0] = c;
 }
 
+//prints a single character
 void OLED_print(char c){
 	int pos = c - 32;
 	for (int i = 0; i < 8; i++){
@@ -83,20 +90,25 @@ void OLED_print(char c){
 	}
 }
 
+//navigate to a certain position on the oled display
 void OLED_pos(uint8_t row, uint8_t column){
 	OLED_goto_line(row);
 	OLED_goto_column(column);
 }
 
+//navigate to a specific line
 void OLED_goto_line(uint8_t line){
 	OLED_write_command(0xb0 + (line));		
 }
 
+//navigate to a specific column
+//the screen is divided in two: a lower	start column address and an upper start column address
 void OLED_goto_column(uint8_t column){
 	OLED_write_command(column & 0x0F);
 	OLED_write_command(0x10 | (column >> 4));
 }
 
+//print an entire string 
 void OLED_print_string(char* str){
 	int i = 0;
 	while(str[i] != '\0'){

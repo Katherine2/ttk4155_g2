@@ -20,22 +20,24 @@ void mcp2515_init(void){
 	SPI_MasterInit();
 	mcp2515_reset();
 	
-	value = mcp2515_read(MCP_CANSTAT);
+	value = mcp2515_read(MCP_CANSTAT);		//sets it to configuration mode
 	if((value & MODE_MASK) != MODE_CONFIG){
 		printf("MCP2515 is NOT in configuration mode after reset!\n");
 	}
 }
 
+//All of the functions below follow the steps described in section 12 of the MCP2515 datasheet
+
 uint8_t mcp2515_read(uint8_t address){
 	uint8_t result;
 	
-	PORTB &= ~(1<<PB4);
+	PORTB &= ~(1<<PB4);					//pull !CS low
 	
-	SPI_MasterTransmit(MCP_READ);
-	SPI_MasterTransmit(address);
-	result = SPI_MasterReceive();
+	SPI_MasterTransmit(MCP_READ);		//send read instruction
+	SPI_MasterTransmit(address);		//send the address we want to read from
+	result = SPI_MasterReceive();		//the data is stored
 	
-	PORTB |= (1<<PB4);
+	PORTB |= (1<<PB4);					//pull !CS to high
 	
 	return result;
 }

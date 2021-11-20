@@ -25,8 +25,8 @@ void SPI_MasterInit(void){
 	// Enable SPI, Master, set clock rate fck/16 & select mode 00
 	SPCR |= (1<<SPE)|(1<<MSTR)|(1<<SPR0);
 
-	SPCR &= ~(1<<CPOL);		//Not required
-	SPCR &= ~(1<<CPHA);		//Not required
+	SPCR &= ~(1<<CPOL);
+	SPCR &= ~(1<<CPHA);
 
 	PORTB |= (1<<SS);
 }
@@ -38,7 +38,7 @@ void SPI_MasterTransmit(char cData){
 	while(!(SPSR & (1<<SPIF)));
 }
 
-
+//to receive, one must transmit a dummy character
 char SPI_MasterReceive(void){
 	SPI_MasterTransmit('a');
 	return SPDR;

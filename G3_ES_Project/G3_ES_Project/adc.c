@@ -5,7 +5,7 @@
  *  Author: kathersi
  */ 
 
-#define ADC_BASE 0x1400
+#define ADC_BASE 0x1400			//address of the ADC
 
 #include "adc.h"
 

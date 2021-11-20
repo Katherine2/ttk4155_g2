@@ -10,7 +10,6 @@
 
 #include "joystick.h"
 #include "oled.h"
-
 #include "uart.h"
 #include "sram.h"
 #include "adc.h"
@@ -26,7 +25,6 @@
 static int centerX, centerY;
 int currentRow;
 int playing = 0;
-//static int brightness_subMenu = 0;
 
 void menu_init(void){
 	centerX = calibrate_joystick_center(0, 10);
@@ -129,7 +127,6 @@ void select_item(int row){
 				if(currentRow < 0){
 					currentRow = 6;
 				}
-				//printf("current row after moving up: %d\r\n", currentRow);
 				OLED_pos(currentRow, 0);
 				OLED_print('>');
 				_delay_ms(1000);
@@ -140,7 +137,6 @@ void select_item(int row){
 				if(currentRow > 6){
 					currentRow = 0;
 				}
-				//printf("current row after moving down: %d\r\n", currentRow);
 				OLED_pos(currentRow, 0);
 				OLED_print('>');
 				_delay_ms(1000);
@@ -170,12 +166,10 @@ void select_item(int row){
 		OLED_print_string("reset");
 	}
 	else if (row == 6){
-		//calibrate joystick
+		//display center values
 		char buffer[10];
 		OLED_pos(0,15);
 		OLED_print_string("Center values");
-		//centerX = calibrate_joystick_center(HORIZONTAL, 10);
-		//centerY = calibrate_joystick_center(VERTICAL, 10);
 		printf("x: %d, y: %d\n\r", centerX, centerY);
 		OLED_pos(2,15);
 		OLED_print_string("X center: ");
@@ -192,15 +186,15 @@ void select_item(int row){
 }
 
 void select_brightness(int row){
-	if (row == 2){
+	if (row == 2){	//low brightness
 		OLED_write_command(0x81);
 		OLED_write_command(0x10);
 	}
-	else if (row == 4){
+	else if (row == 4){	//medium brightness
 		OLED_write_command(0x81);
 		OLED_write_command(0x50);
 	}
-	else if (row == 6){
+	else if (row == 6){	//high brightness
 		OLED_write_command(0x81);
 		OLED_write_command(0xa0);
 	}
@@ -216,9 +210,9 @@ void start_animation(char *str){
 	OLED_write_command(0x01);	//dummy byte
 	OLED_pos(7, 0);
 	OLED_print_string(str);
-	OLED_write_command(0x2F);
+	OLED_write_command(0x2F);	//start animation
 	_delay_ms(1000);
-	OLED_write_command(0x2E);
+	OLED_write_command(0x2E);	//end animation
 	_delay_ms(300);	
 	OLED_clear();
 }
@@ -226,7 +220,6 @@ void start_animation(char *str){
 void start_game(void){
 	while(1){
 		int valueH = adc_read(HORIZONTAL);
-		//printf("adc horizontal value: %d\n\r", valueH);
 		int valueV = adc_read(VERTICAL);
 		int button_status = get_button_status();
 		send_joystick_status(valueH, valueV, button_status, centerX, centerY);
