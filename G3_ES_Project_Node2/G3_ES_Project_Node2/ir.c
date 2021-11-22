@@ -29,6 +29,7 @@ int is_goal(int value, int score){
 	PIOA -> PIO_PER = PIO_PA19;			//enables input/output function
 	PIOA -> PIO_OER = PIO_PA19;			//sets pin PA19 (pin 42) as output
 	PIOA -> PIO_PUDR = PIO_PA19;		//disables pull-ups
+	//printf("%d\n\r", value);
 	if(value < IR_THRESHOLD){
 		score++;
 		PIOA -> PIO_SODR = PIO_PA19;	//turn on LED

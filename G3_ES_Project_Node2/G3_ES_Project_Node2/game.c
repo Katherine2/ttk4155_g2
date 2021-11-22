@@ -11,7 +11,7 @@
 #include "can_controller.h"
 #include "sam.h"
 
-#define GAME_OVER 50		//the number of points before there is a game over
+#define GAME_OVER 10		//the number of points before there is a game over
 
 int playing = 1, game_end= 0;
 CAN_MESSAGE msg;
@@ -23,7 +23,7 @@ void start_game(){
 			adc = adc_read();
 			goal = is_goal(adc, goal);
 			msg = get_positions();
-			delay_us(100000);
+			delay_us(20);
 		}
 		else{
 			if(new_message_received()){		//resume the game after a goal by pressing the joystick button
